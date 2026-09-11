@@ -1,6 +1,11 @@
 frogo = class:new() 
 
-function frogo:init(x, y, w, h, jump_vx, jump_vy, gravity)
+function frogo:init(
+    x, y, 
+    w, h, 
+    jump_vx, jump_vy, 
+    gravity
+)
     self.x, self.y = x, y
     self.w, self.h = w, h 
     self.ox, self.oy = self.w/2, self.h/2  

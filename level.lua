@@ -3,7 +3,7 @@ function level_load()
     spacebar_ticks = 0
     background = sprites['back0']
     music_player = mplayer:new(120, moon_sonata)
-    frogo = frogo:new(16, 128, 21, 16, 100, 500, 700)
+    frogo = frogo:new(game_w / 2, game_h / 2, 21, 16, 100, 500, 700)
     objects = {
         -- here comes only objects with draw method implemented 
         drawable = {
