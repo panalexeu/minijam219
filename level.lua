@@ -3,13 +3,25 @@ function level_load()
     spacebar_ticks = 0
     backgrounds = {
         {
-            sprite = sprites['back0'], 
+            sprite = sprites['back1'], 
+            x = 176,
+            w = 48,
+            h = 48,
+        },
+        {
+            sprite = sprites['back2'], 
             x = 144,
             w = 112,
             h = 48,
+        },
+        {
+            sprite = sprites['back3'], 
+            x = 112,
+            w = 176,
+            h = 48,
         }
     } 
-    lvl = 1 
+    lvl = 3
     music_player = mplayer:new(120, moon_sonata)
     frogo = frogo:new(game_w / 2, game_h / 2, 21, 16, 100, 250, 700)
     objects = {
