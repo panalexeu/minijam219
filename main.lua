@@ -1,5 +1,5 @@
 function love.load() 
-
+    require "class"
 end 
 
 function love.draw() 
