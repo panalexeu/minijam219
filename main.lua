@@ -25,6 +25,7 @@ function love.load()
     }
     load_sprite('frogo', 'frogo.png')
     load_quads('frogo_idle', 0, 21, 16, 4)
+    load_quads('frogo_jump', 1, 21, 16, 1)
 
     level_load()
 end 

@@ -18,13 +18,21 @@ function frogo:init(x, y, w, h, speed_y, speed_x, gravity)
     self.dir_y = 0 
     self.dir_y_momentum = 0
    
-
+    -- anims 
     self.img = sprites['frogo']
-    self.quad = quads['frogo_idle'][1]
+    self.anim_timer = 0 
+    self.anim_frame = 1
+    self.cur_frame = 'frogo_idle'
+    self.quad = quads[self.cur_frame][self.anim_frame]
+    self.anim_speed = {
+        frogo_idle = 0.5, 
+        frogo_jump = 1/60
+    }
 end 
 
 -- TODO REWROK PHYSICS WITH CLAUDE
 function frogo:update(dt)
+    -- MOVEMENT
     if self.dir_y == -1 then 
         -- leap jump (constant)
         self.y = self.y + (self.speed_y * self.dir_y) 
@@ -40,6 +48,7 @@ function frogo:update(dt)
         self.dir_x_momentum = math.max(0, self.dir_x_momentum - self.speed_x * dt / 2)
     end 
 
+    -- COLLISIONS
     -- basic floor collision
     if self.y >= 224-self.h then 
         self.dir_y = 0
@@ -55,9 +64,34 @@ function frogo:update(dt)
         self.x = 400-self.w
         self.dir_x_momentum = 0
     end 
+
+    -- ANIMATION 
+    if self.dir_y == 0 then 
+        self.cur_frame = 'frogo_idle'
+    elseif self.dir_y == -1 then 
+        self.cur_frame = 'frogo_jump'
+    end
+
+    self:animate(dt)
 end 
 
 function frogo:draw() 
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(self.img, self.quad, self.x, self.y, 0, self.dir_x, 1, self.ox, self.oy)
+end 
+
+function frogo:next_anim_frame() 
+    self.anim_timer = 0 
+    self.anim_frame = self.anim_frame + 1
+    if self.anim_frame > #quads[self.cur_frame] then 
+        self.anim_frame = 1 
+    end 
+end 
+
+function frogo:animate(dt)
+    self.anim_timer = self.anim_timer + dt
+    if self.anim_timer >= self.anim_speed[self.cur_frame] then 
+        self:next_anim_frame() 
+        self.quad = quads[self.cur_frame][self.anim_frame]
+    end 
 end 
