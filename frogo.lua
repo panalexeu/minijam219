@@ -16,8 +16,8 @@ function frogo:init(x, y, w, h, jump_vx, jump_vy, gravity)
     self.img = sprites['frogo']
     self.anim_speed = {
         frogo_idle = 0.5, 
-        frogo_jump = 1/60, 
-        frogo_fall = 1/60
+        frogo_jump = 1, 
+        frogo_fall = 1
     }
     self.anim_key, self.anim_timer, self.anim_frame = nil, nil, nil
     self:set_anim('frogo_idle')
