@@ -21,7 +21,8 @@ function frogo:init(
     -- anims 
     self.img = sprites['frogo']
     self.anim_speed = {
-        frogo_idle = 0.5, 
+        frogo_idle = 0.5,
+        frogo_land = 0.5, 
         frogo_jump = 1, 
         frogo_fall = 1
     }

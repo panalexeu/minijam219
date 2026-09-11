@@ -32,6 +32,7 @@ function love.load()
     load_quads('frogo_idle', 0, 21, 16, 4)
     load_quads('frogo_jump', 1, 21, 16, 1)
     load_quads('frogo_fall', 2, 21, 16, 1)
+    load_quads('frogo_land', 3, 21, 16, 2)
 
     level_load()
 end 
