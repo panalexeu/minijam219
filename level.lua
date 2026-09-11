@@ -1,6 +1,8 @@
 function level_load()
     game_state = 'level'
-
+    
+    pos, timer = 1, 0
+    music_player = mplayer:new(162, moon_sonata)
     objects = {
         -- here comes only objects with draw method implemented 
         drawable = {
@@ -9,6 +11,10 @@ function level_load()
             firefly:new(128, 128, 16),
         }
     }
+end 
+
+function level_update(dt)
+    music_player:update(dt)
 end 
 
 function level_draw() 
