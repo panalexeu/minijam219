@@ -11,12 +11,13 @@ function love.load()
     game_w, game_h  = 400, 224 
     window_w, window_h = 800, 448
     love.window.setMode(window_w, window_h)
-    game_screen = love.graphics.newCanvas(game_w, game_h)
+    screen = love.graphics.newCanvas(game_w, game_h)
+    love.graphics.setDefaultFilter('nearest', 'nearest')
 
     -- music 
     notes = {}
     for i = 0, 7 do
-        notes[i+1] = love.audio.newSource("assets/sound/note" .. i .. ".wav", "static")
+        notes[i+1] = love.audio.newSource('assets/sound/note' .. i .. '.wav', 'static')
     end
 
     -- sprites n quads 
@@ -38,10 +39,23 @@ function love.update(dt)
     end
 end
 
-function love.draw()     
+-- todo spend 5 minutes on understanding how resizing actually works 
+function love.draw()    
+    love.graphics.setCanvas(screen)
+    love.graphics.clear(0, 0, 0)
+    
     if game_state == 'level' then 
         level_draw()
     end 
+
+    love.graphics.setCanvas()
+
+    scale = math.min(window_w / game_w, window_h / game_h)
+    offset_x = math.floor((window_w - game_w * scale) / 2)
+    offset_y = math.floor((window_h - game_h * scale) / 2)
+
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.draw(screen, offset_x, offset_y, 0, scale, scale)
 end 
 
 function love.keypressed(key)
