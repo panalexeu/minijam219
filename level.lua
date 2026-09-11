@@ -1,9 +1,17 @@
 function level_load()
     game_state = 'level'   
     spacebar_ticks = 0
-    background = sprites['back0']
+    backgrounds = {
+        {
+            sprite = sprites['back0'], 
+            x = 144,
+            w = 112,
+            h = 48,
+        }
+    } 
+    lvl = 1 
     music_player = mplayer:new(120, moon_sonata)
-    frogo = frogo:new(game_w / 2, game_h / 2, 21, 16, 100, 500, 700)
+    frogo = frogo:new(game_w / 2, game_h / 2, 21, 16, 100, 250, 700)
     objects = {
         -- here comes only objects with draw method implemented 
         drawable = {
@@ -18,6 +26,7 @@ end
 function level_update(dt)
     music_player:update(dt)
     frogo:update(dt)
+    frogo_floor_col()
 
     -- charge the frogo jump speed 
     if love.keyboard.isDown('space') then
@@ -31,13 +40,14 @@ function level_draw()
 
     -- background
     love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(background, 0, 0, 0, 1, 1)
+    love.graphics.draw(backgrounds[lvl].sprite, 0, 0, 0, 1, 1)
 
     for _, obj in ipairs(objects.drawable) do 
         obj:draw()
     end 
 end 
 
+-- controls 
 function level_keyreleased(key)
     if key == 'space' then 
         frogo:jump()
@@ -59,6 +69,21 @@ function level_keypressed(key)
     end 
 end 
 
+-- collisions 
+function frogo_floor_col()
+    local back = backgrounds[lvl]
+    local floor = (game_h - back.h) - frogo.h / 2
+    local over = frogo.x + frogo.w / 2 > back.x
+            and frogo.x - frogo.w / 2 < back.x + back.w
+
+    if over and frogo.vy >= 0 and frogo.prev_y <= floor and frogo.y >= floor then
+        frogo.y = floor
+        frogo.vx, frogo.vy = 0, 0
+        frogo.on_ground = true
+    end
+end  
+
+-- ticks 
 function get_ticks()
     return math.floor(love.timer.getTime() * 1000)
 end 

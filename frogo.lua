@@ -7,12 +7,13 @@ function frogo:init(
     gravity
 )
     self.x, self.y = x, y
+    self.prev_y = self.y
     self.w, self.h = w, h 
     self.ox, self.oy = self.w/2, self.h/2  
     self.jump_vx, self.jump_vy = jump_vx, jump_vy
     self.vx, self.vy = 0, 0 
     self.gravity = gravity
-    self.on_ground = false
+    self.on_ground = false 
 
     -- dir_x: -1 face right, 1 face left, dir_y: -1 up, 0 on the ground
     self.dir_x = -1  
@@ -38,6 +39,9 @@ function frogo:jump()
 end
 
 function frogo:update(dt)
+    -- previous y pos for collision detection
+    self.prev_y = self.y 
+
     -- jump
     if not self.on_ground then 
         self.vy =  self.vy + self.gravity * dt 
@@ -45,14 +49,6 @@ function frogo:update(dt)
     -- leap
     self.x = self.x + -self.dir_x * self.vx * dt
     self.y = self.y + self.vy * dt 
- 
-    -- floor collision 
-    local floor_col = (game_h - self.h / 2)
-    if self.y >= floor_col then 
-        self.y = floor_col
-        self.vx, self.vy = 0, 0 
-        self.on_ground = true
-    end 
 
     -- anim states
     if self.on_ground then 
