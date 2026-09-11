@@ -1,6 +1,5 @@
 function love.load() 
     require "class"
-
     require "level"
     require "firefly"
     require "mplayer"
@@ -9,8 +8,10 @@ function love.load()
     require "utils"
 
     game_state = "load"
-
-    love.window.setMode(400, 224)
+    game_w, game_h  = 400, 224 
+    window_w, window_h = 800, 448
+    love.window.setMode(window_w, window_h)
+    game_screen = love.graphics.newCanvas(game_w, game_h)
 
     -- music 
     notes = {}
@@ -26,6 +27,7 @@ function love.load()
     load_sprite('frogo', 'frogo.png')
     load_quads('frogo_idle', 0, 21, 16, 4)
     load_quads('frogo_jump', 1, 21, 16, 1)
+    load_quads('frogo_fall', 2, 21, 16, 1)
 
     level_load()
 end 

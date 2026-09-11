@@ -1,76 +1,62 @@
 frogo = class:new() 
 
-function frogo:init(x, y, w, h, speed_y, speed_x, gravity)
-    self.x = x
-    self.y = y
-    self.w = w 
-    self.h = h
-    self.ox = self.w/2
-    self.oy = self.h/2  
-    self.speed_x = speed_x
-    self.speed_y = speed_y  
+function frogo:init(x, y, w, h, jump_vx, jump_vy, gravity)
+    self.x, self.y = x, y
+    self.w, self.h = w, h 
+    self.ox, self.oy = self.w/2, self.h/2  
+    self.jump_vx, self.jump_vy = jump_vx, jump_vy
+    self.vx, self.vy = 0, 0 
     self.gravity = gravity
+    self.on_ground = false
 
-    -- -1 face right, 1 face left
+    -- dir_x: -1 face right, 1 face left, dir_y: -1 up, 0 on the ground
     self.dir_x = -1  
-    self.dir_x_momentum = self.speed_x
-    -- -1 up, 1 down, 0 on the ground
-    self.dir_y = 0 
-    self.dir_y_momentum = 0
-   
+
     -- anims 
     self.img = sprites['frogo']
-    self.anim_timer = 0 
-    self.anim_frame = 1
-    self.cur_frame = 'frogo_idle'
-    self.quad = quads[self.cur_frame][self.anim_frame]
     self.anim_speed = {
         frogo_idle = 0.5, 
-        frogo_jump = 1/60
+        frogo_jump = 1/60, 
+        frogo_fall = 1/60
     }
+    self.anim_key, self.anim_timer, self.anim_frame = nil, nil, nil
+    self:set_anim('frogo_idle')
 end 
 
--- TODO REWROK PHYSICS WITH CLAUDE
+
+function frogo:jump()
+    if self.on_ground then 
+        self.vx = self.jump_vx
+        self.vy = -self.jump_vy
+        self.on_ground = false
+    end 
+end
+
 function frogo:update(dt)
-    -- MOVEMENT
-    if self.dir_y == -1 then 
-        -- leap jump (constant)
-        self.y = self.y + (self.speed_y * self.dir_y) 
-        self.x = self.x + (self.dir_x_momentum * -self.dir_x)
-        
-        -- momentums 
-        self.dir_y_momentum = self.dir_y_momentum + self.gravity * dt
-
-        -- two physical powers influnce frogo: air friciton/gravity 
-        -- gravity
-        self.y = self.y + self.dir_y_momentum
-        -- air friction 
-        self.dir_x_momentum = math.max(0, self.dir_x_momentum - self.speed_x * dt / 2)
+    -- jump
+    if not self.on_ground then 
+        self.vy =  self.vy + self.gravity * dt 
+    end 
+    -- leap
+    self.x = self.x + -self.dir_x * self.vx * dt
+    self.y = self.y + self.vy * dt 
+ 
+    -- floor collision 
+    local floor_col = (game_h - self.h / 2)
+    if self.y >= floor_col then 
+        self.y = floor_col
+        self.vx, self.vy = 0, 0 
+        self.on_ground = true
     end 
 
-    -- COLLISIONS
-    -- basic floor collision
-    if self.y >= 224-self.h then 
-        self.dir_y = 0
-        self.dir_y_momentum = 0
-        self.dir_x_momentum = self.speed_x
+    -- anim states
+    if self.on_ground then 
+        self:set_anim('frogo_idle')
+    elseif not self.on_ground and self.vy <= 0 then 
+        self:set_anim('frogo_jump')
+    elseif not self.on_ground and self.vy >= 0 then 
+        self:set_anim('frogo_fall')
     end 
-
-    -- basic wall collision 
-    if self.x <= 0 then 
-        self.x = 0
-        self.dir_x_momentum = 0
-    elseif self.x >= 400-self.w then 
-        self.x = 400-self.w
-        self.dir_x_momentum = 0
-    end 
-
-    -- ANIMATION 
-    if self.dir_y == 0 then 
-        self.cur_frame = 'frogo_idle'
-    elseif self.dir_y == -1 then 
-        self.cur_frame = 'frogo_jump'
-    end
 
     self:animate(dt)
 end 
@@ -80,18 +66,28 @@ function frogo:draw()
     love.graphics.draw(self.img, self.quad, self.x, self.y, 0, self.dir_x, 1, self.ox, self.oy)
 end 
 
+-- anims
+function frogo:set_anim(key)
+    if self.anim_key ~= key then 
+        self.anim_key = key 
+        self.anim_frame = 1
+        self.anim_timer = 0 
+        self.quad = quads[self.anim_key][self.anim_frame]
+    end  
+end 
+
 function frogo:next_anim_frame() 
     self.anim_timer = 0 
     self.anim_frame = self.anim_frame + 1
-    if self.anim_frame > #quads[self.cur_frame] then 
+    if self.anim_frame > #quads[self.anim_key] then 
         self.anim_frame = 1 
     end 
 end 
 
 function frogo:animate(dt)
     self.anim_timer = self.anim_timer + dt
-    if self.anim_timer >= self.anim_speed[self.cur_frame] then 
+    if self.anim_timer >= self.anim_speed[self.anim_key] then 
         self:next_anim_frame() 
-        self.quad = quads[self.cur_frame][self.anim_frame]
+        self.quad = quads[self.anim_key][self.anim_frame]
     end 
 end 
