@@ -9,6 +9,7 @@ function level_load()
             firefly:new(15, 15, 16),
             firefly:new(32, 32, 32),
             firefly:new(128, 128, 16),
+            frogo:new(16, 16, 21, 16)
         }
     }
 end 
