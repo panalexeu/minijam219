@@ -22,6 +22,7 @@ function level_load()
         }
     } 
     lvl = 3
+    ambient_color = {0.05, 0.05, 0.1}     
     music_player = mplayer:new(120, moon_sonata)
     frogo = frogo:new(game_w / 2, game_h / 2, 21, 16, 100, 250, 700)
     objects = {
@@ -51,6 +52,7 @@ function level_draw()
     love.graphics.print("jump_speed" .. frogo.vy, 0, 0)
 
     -- background
+    love.graphics.clear(ambient_color)
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(backgrounds[lvl].sprite, 0, 0, 0, 1, 1)
 
