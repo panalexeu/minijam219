@@ -17,9 +17,16 @@ end
 function level_update(dt)
     music_player:update(dt)
     frogo:update(dt)
+
+    -- charge the frogo jump speed 
+    if love.keyboard.isDown('space') then
+        local ticks_passed = get_ticks() - spacebar_ticks
+        frogo.jump_speed = ticks2jmp_speed(ticks_passed) 
+    end
 end 
 
 function level_draw() 
+    love.graphics.print("jump_speed" .. frogo.jump_speed, 0, 0)
     for _, obj in ipairs(objects.drawable) do 
         obj:draw()
     end 
@@ -27,8 +34,6 @@ end
 
 function level_keyreleased(key)
     if key == 'space' then 
-        local ticks_passed = get_ticks() - spacebar_ticks
-        frogo.jump_speed = ticks2jmp_speed(ticks_passed)
         frogo.dir_y = -1 
         spacebar_ticks = 0
     end 
@@ -45,7 +50,6 @@ function level_keypressed(key)
     end 
     if key == 'space' then 
         spacebar_ticks = get_ticks()
-        print(spacebar_ticks)
     end 
 end 
 

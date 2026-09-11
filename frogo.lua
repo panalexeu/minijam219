@@ -47,5 +47,6 @@ function frogo:update(dt)
 end 
 
 function frogo:draw() 
+    love.graphics.setColor(1,1,1,1)
     love.graphics.draw(self.img, self.quad, self.x, self.y, 0, self.dir_x, 1, self.ox, self.oy)
 end 
