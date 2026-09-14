@@ -8,10 +8,12 @@ function firefly:init(x, y, size)
     self.dirs = {-1, 1}
     self.dir_x = self.dirs[love.math.random(#self.dirs)]    
     self.dir_y = math.sin(self.x)
-
-    self.velocities = {10, 20, 30}
+    self.velocities = {10, 20, 30, 40}
     self.v = self.velocities[love.math.random(#self.velocities)]
+    self.t = self.v -- inner clock that starts from random velocity 
 
+    self.glow_alpha = 0.5 -- glow brightness 
+    self.glow_beta = 2.7 -- blinking speed 
     self.color = {0.8, 1, 0.3, 1}
     local img_data = love.image.newImageData(size, size)
     -- eucledian distance with alpha gradually decreasing from the centre of an image
@@ -23,15 +25,20 @@ function firefly:init(x, y, size)
 end 
 
 function firefly:draw()
-    love.graphics.setColor(self.color)
+    local glow = self.glow_alpha + (1 - self.glow_alpha) * math.sin(self.t * self.glow_beta)
+    local glow_color = vec_m_scalar(self.color, glow)
+    love.graphics.setColor(glow_color)
     love.graphics.draw(self.img, self.x, self.y, 0, 1, 1, self.ox, self.oy)
-    --                 image     x       y      rot sx sy ox oy
 end  
 
 function firefly:update(dt)
+    -- movement 
     self.x = self.x + self.dir_x * self.v * dt
     self.y = self.y + self.dir_y * self.v * dt
     self.dir_y = math.sin(self.x)
+    
+    -- inner clock
+    self.t = self.t + dt 
 end 
 
 function firefly:screen_col()

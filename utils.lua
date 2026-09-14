@@ -5,3 +5,11 @@ function split(str, sep)
   end
   return parts
 end
+
+function vec_m_scalar(vec, scalar)
+  local t = {}
+  for i=1,#vec do 
+    t[i] = vec[i] * scalar
+  end 
+  return t 
+end 
