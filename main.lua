@@ -5,6 +5,7 @@ function love.load()
     require "frogo"
     require "utils"
     require "ui"
+    require "score"
 
     game_state = "load"
     frames = 60

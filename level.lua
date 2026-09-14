@@ -2,9 +2,12 @@ function level_load()
     game_state = 'level'   
     spacebar_ticks = 0
     lvl = 1
+    cur_score = 0 
     lvl_gravity = 700
     firefly_grav_factor = 100
-    firefly_gravity = lvl_gravity / firefly_grav_factor   
+    firefly_gravity = lvl_gravity / firefly_grav_factor
+    score_grav_factor = 100
+    score_gravity = lvl_gravity / score_grav_factor 
 
     -- objects 
     player = frogo:new((game_w / 2) - 8, 0, 21, 16, 100, 250, lvl_gravity)
@@ -38,7 +41,7 @@ function level_load()
     --back_color    = {0.42, 0.45, 0.58, 1}   -- dusty slate blue
     back_color = {0,0,0,1}
     light_canvas = love.graphics.newCanvas(game_w, game_h)
-    canvas_mode = true
+    canvas_mode = false
 end 
 
 function level_update(dt)
@@ -50,6 +53,8 @@ function level_update(dt)
         elseif obj.__baseclass == firefly then
             firefly_screen_col(obj)
             firefly_player_col(i, obj, player)
+        elseif obj.__baseclass == score then 
+            score_cleanup(i, obj)
         end 
     end 
 end 
@@ -155,9 +160,14 @@ function firefly_player_col(i, obj, player)
     local col = math.abs(obj.x - player.x) < obj.ox + player.ox 
                 and math.abs(obj.y - player.y) < obj.oy + player.oy
     if col then
+        -- catch firefly 
         sounds['catch']:play()
-        ui:next_score()
         table.remove(objects, i)
+        -- update score
+        local n = 1000
+        cur_score = cur_score + n
+        local s = score:new(n, player.x, player.y, score_gravity)
+        table.insert(objects, s)
     end
 end
 
@@ -188,4 +198,10 @@ function spawn_fireflies(x, y, dx, dy, count)
         table.insert(t, fly)
     end 
     return t
+end 
+
+function score_cleanup(i, obj)
+    if obj.t >= obj.lifetime then 
+        table.remove(objects, i)
+    end 
 end 
