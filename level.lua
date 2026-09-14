@@ -23,7 +23,6 @@ function level_load()
     } 
     lvl = 3
     ambient_color = {0.05, 0.05, 0.1}     
-    music_player = mplayer:new(120, moon_sonata)
     frogo = frogo:new(game_w / 2, game_h / 2, 21, 16, 100, 250, 700)
     objects = {
         -- here comes only objects with draw method implemented 
@@ -37,7 +36,6 @@ function level_load()
 end 
 
 function level_update(dt)
-    music_player:update(dt)
     frogo:update(dt)
     frogo_floor_col()
 

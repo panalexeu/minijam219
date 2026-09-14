@@ -2,8 +2,6 @@ function love.load()
     require "class"
     require "level"
     require "firefly"
-    require "mplayer"
-    require "tracks"
     require "frogo"
     require "utils"
 
