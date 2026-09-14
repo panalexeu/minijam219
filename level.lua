@@ -25,18 +25,21 @@ function level_load()
     ambient_color = {0.05, 0.05, 0.1}     
     frogo = frogo:new(game_w / 2, game_h / 2, 21, 16, 100, 250, 700)
     objects = {
-        -- here comes only objects with draw method implemented 
-        drawable = {
-            firefly:new(15, 15, 16),
-            firefly:new(32, 32, 32),
-            firefly:new(128, 128, 16),
+        -- here comes only objects with draw and update methods implemented 
+        drawable_updatable = {
+            firefly:new(15, 15, 8),
+            firefly:new(32, 32, 8),
+            firefly:new(128, 128, 8),
             frogo
         }
     }
 end 
 
 function level_update(dt)
-    frogo:update(dt)
+    for _, obj in ipairs(objects.drawable_updatable) do 
+        obj:update(dt)
+    end 
+
     frogo_floor_col()
 
     -- charge the frogo jump speed 
@@ -54,7 +57,7 @@ function level_draw()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(backgrounds[lvl].sprite, 0, 0, 0, 1, 1)
 
-    for _, obj in ipairs(objects.drawable) do 
+    for _, obj in ipairs(objects.drawable_updatable) do 
         obj:draw()
     end 
 end 
@@ -84,9 +87,9 @@ end
 -- collisions 
 function frogo_floor_col()
     local back = backgrounds[lvl]
-    local floor = (game_h - back.h) - frogo.h / 2
-    local over = frogo.x + frogo.w / 2 > back.x
-            and frogo.x - frogo.w / 2 < back.x + back.w
+    local floor = (game_h - back.h) - frogo.oy
+    local over = frogo.x + frogo.ox > back.x
+            and frogo.x - frogo.ox < back.x + back.w
 
     if over and frogo.vy >= 0 and frogo.prev_y <= floor and frogo.y >= floor then
         frogo:floor_collide(floor)
