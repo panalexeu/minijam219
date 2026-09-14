@@ -39,11 +39,17 @@ function frogo:jump()
     end 
 end
 
+function frogo:floor_collide(y) 
+    self.y = y
+    self.vx, self.vy = 0, 0
+    self.on_ground = true
+end 
+
 function frogo:update(dt)
     -- previous y pos for collision detection
     self.prev_y = self.y 
 
-    -- jump
+    -- gravity 
     if not self.on_ground then 
         self.vy =  self.vy + self.gravity * dt 
     end 

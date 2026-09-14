@@ -89,9 +89,7 @@ function frogo_floor_col()
             and frogo.x - frogo.w / 2 < back.x + back.w
 
     if over and frogo.vy >= 0 and frogo.prev_y <= floor and frogo.y >= floor then
-        frogo.y = floor
-        frogo.vx, frogo.vy = 0, 0
-        frogo.on_ground = true
+        frogo:floor_collide(floor)
     end
 end  
 
