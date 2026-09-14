@@ -22,14 +22,17 @@ function level_load()
         }
     } 
     lvl = 3
+    lvl_gravity = 700
+    firefly_grav_factor = 140 
+    firefly_gravity = lvl_gravity / firefly_grav_factor
     ambient_color = {0.05, 0.05, 0.1}     
-    player = frogo:new(game_w / 2, game_h / 2, 21, 16, 100, 250, 700)
+    player = frogo:new(game_w / 2, game_h / 2, 21, 16, 100, 250, lvl_gravity)
     objects = {
         -- here comes only objects with draw and update methods implemented 
         drawable_updatable = {
-            firefly:new(15, 15, 8),
-            firefly:new(32, 32, 8),
-            firefly:new(128, 128, 8),
+            firefly:new(15, 15, 8, firefly_gravity),
+            firefly:new(32, 32, 8, firefly_gravity),
+            firefly:new(128, 128, 8, firefly_gravity),
             player
         }
     }
@@ -45,12 +48,6 @@ function level_update(dt)
             firefly_screen_col(obj)
         end 
     end 
-
-    -- charge the frogo jump speed 
-    if love.keyboard.isDown('space') then
-        local ticks_passed = get_ticks() - spacebar_ticks
-        -- frogo.vy = ticks2jmp_speed(ticks_passed) 
-    end
 end 
 
 function level_draw() 

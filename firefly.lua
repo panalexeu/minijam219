@@ -1,16 +1,18 @@
 firefly = class:new()
 
-function firefly:init(x, y, size)
+function firefly:init(x, y, size, gravity)
     self.x, self.y = x, y 
     self.ox, self.oy = size / 2,  size / 2
     self.size = size 
+    self.gravity = gravity 
 
     self.dirs = {-1, 1}
     self.dir_x = self.dirs[love.math.random(#self.dirs)]    
     self.dir_y = math.sin(self.x)
-    self.velocities = {10, 20, 30, 40}
-    self.v = self.velocities[love.math.random(#self.velocities)]
-    self.t = self.v -- inner clock that starts from random velocity 
+    self.velocities = {10, 15, 20, 25, 30}
+    self.vx = self.velocities[love.math.random(#self.velocities)]
+    self.vy = self.vx 
+    self.t = self.vx -- inner clock that starts from random velocity 
 
     self.glow_alpha = 0.5 -- glow brightness 
     self.glow_beta = 2.7 -- blinking speed 
@@ -32,9 +34,11 @@ function firefly:draw()
 end  
 
 function firefly:update(dt)
+    -- gravity
+    self.y = self.y + self.gravity * dt
     -- movement 
-    self.x = self.x + self.dir_x * self.v * dt
-    self.y = self.y + self.dir_y * self.v * dt
+    self.x = self.x + self.dir_x * self.vx * dt
+    self.y = self.y + self.dir_y * self.vy * dt
     self.dir_y = math.sin(self.x)
     
     -- inner clock
