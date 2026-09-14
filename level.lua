@@ -10,8 +10,7 @@ function level_load()
     player = frogo:new((game_w / 2) - 8, 0, 21, 16, 100, 250, lvl_gravity)
     ui = ui:new(0, 0, 3, 0)
     fireflies = vec_cat(spawn_fireflies(5, 100, 5, 5, 20), spawn_fireflies(395, 5, 5, 5, 20))
-    lightable = fireflies
-    updatable = vec_cat(fireflies, {player}) 
+    objects = vec_cat(fireflies, {player}) 
 
     -- rudimentary lighting system 
     platforms = {
@@ -39,11 +38,11 @@ function level_load()
     --back_color    = {0.42, 0.45, 0.58, 1}   -- dusty slate blue
     back_color = {0,0,0,1}
     light_canvas = love.graphics.newCanvas(game_w, game_h)
-    canvas_mode = false
+    canvas_mode = true
 end 
 
 function level_update(dt)
-    for i, obj in ipairs(updatable) do 
+    for i, obj in ipairs(objects) do 
         obj:update(dt)
         -- collisions 
         if obj.__baseclass == frogo then 
@@ -56,37 +55,43 @@ function level_update(dt)
 end 
 
 function level_draw() 
+    -- rudimentary lighting system 
     if canvas_mode then 
         -- draw light_canvas
         love.graphics.setCanvas(light_canvas) 
         love.graphics.clear(ambient_color)
         love.graphics.setBlendMode("add")
         draw_light(16)
-        for _, obj in ipairs(lightable) do 
-            obj:draw()
+        for _, obj in ipairs(objects) do 
+            if obj.__baseclass == firefly then
+                obj:draw()
+            end
         end
         love.graphics.setBlendMode("alpha")
 
         -- draw everything on level that does not emit light  
         love.graphics.setCanvas(screen)
         draw_back()
-        player:draw()
+        for _, obj in ipairs(objects) do 
+            if obj.__baseclass ~= firefly then
+                obj:draw()
+            end
+        end
 
         -- multiply the light_canvas with the level
         love.graphics.setBlendMode("multiply", "premultiplied") 
         love.graphics.setColor(1,1,1,1)
         love.graphics.draw(light_canvas)
         love.graphics.setBlendMode("alpha")
+    -- no lighting and it seems to be better
     else 
         draw_back()
-        for _, obj in ipairs(lightable) do 
+        for _, obj in ipairs(objects) do 
             obj:draw()
-        end
-        player:draw()
+        end 
     end
 
     -- ui 
-    properprint('1000|1000', 24, 16)
     ui:draw()
 end 
 
@@ -152,10 +157,7 @@ function firefly_player_col(i, obj, player)
     if col then
         sounds['catch']:play()
         ui:next_score()
-        --  NOTE: this is really sus, remove from fireflies table only works if first updatable entries are the same fireflies too,
-        -- only if vec_cat(fireflies, {player})
-        table.remove(updatable, i)
-        table.remove(fireflies, i)
+        table.remove(objects, i)
     end
 end
 

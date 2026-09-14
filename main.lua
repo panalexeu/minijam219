@@ -7,6 +7,7 @@ function love.load()
     require "ui"
 
     game_state = "load"
+    frames = 60
     game_w, game_h  = 400, 224 
     window_w, window_h = 800, 448
     love.window.setMode(window_w, window_h)
@@ -112,8 +113,7 @@ function load_fontquads(glyphs, w)
     end 
 end 
 
-function properprint(s, x, y)
-    local scale = 1
+function properprint(s, x, y, scale)
     local startx = x
 	for i = 1, string.len(tostring(s)) do
 		local char = string.sub(s, i, i)
