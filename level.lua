@@ -86,6 +86,7 @@ function level_draw()
     end
 
     -- ui 
+    properprint('1000|1000', 24, 16)
     ui:draw()
 end 
 

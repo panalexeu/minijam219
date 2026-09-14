@@ -32,17 +32,23 @@ function love.load()
     }
     quads = {
     }
+    fontquads = {
+    }
     load_sprite('frogo', 'frogo.png')
     load_sprite('ui', 'ui.png')
     load_sprite('platform1', 'platform1.png') 
     load_sprite('platform2', 'platform2.png') 
     load_sprite('platform3', 'platform3.png') 
+    load_sprite('font', 'font.png')
     load_quads('frogo_idle', 0, 21, 16, 4)
     load_quads('frogo_jump', 1, 21, 16, 1)
     load_quads('frogo_fall', 2, 21, 16, 1)
     load_quads('frogo_land', 3, 21, 16, 2)
     load_quads('ui_jar', 0, 16, 16, 1)
     load_quads('ui_heart', 1, 16, 16, 1)
+    fontglyphs = '10'
+    load_fontquads(fontglyphs, 8)
+
     level_load()
 end 
 
@@ -98,3 +104,25 @@ function load_quads(key, y_offset, w, h, frames)
     end     
     quads[key] = t
 end  
+
+function load_fontquads(glyphs, w)
+    local img = sprites['font']
+    for i=1,string.len(glyphs) do 
+        fontquads[string.sub(glyphs, i, i)] = love.graphics.newQuad((i-1)*w, 0, w, w, img:getWidth(), img:getHeight())
+    end 
+end 
+
+function properprint(s, x, y)
+    local scale = 1
+    local startx = x
+	for i = 1, string.len(tostring(s)) do
+		local char = string.sub(s, i, i)
+		if char == "|" then
+			x = startx-(i*8)*scale
+			y = y + 10*scale
+		elseif fontquads[char] then
+            local x = x+((i-1)*8)*scale
+			love.graphics.draw(sprites['font'], fontquads[char], x, y, 0, scale, scale)
+		end
+	end
+end
