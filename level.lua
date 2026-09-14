@@ -40,8 +40,8 @@ function level_load()
         }
     } 
     -- claude suggested these colors 
-    ambient_color = {0.45, 0.48, 0.62, 1}
-    back_color = {0.28, 0.30, 0.42, 1}
+    ambient_color = {0.62, 0.66, 0.80, 1}   -- pale periwinkle / moonlit lavender-blue
+    back_color    = {0.42, 0.45, 0.58, 1}   -- dusty slate blue
     light_canvas = love.graphics.newCanvas(game_w, game_h)
 end 
 
