@@ -22,6 +22,10 @@ function love.load()
     for i = 0, 7 do
         notes[i+1] = love.audio.newSource('assets/sound/note' .. i .. '.wav', 'static')
     end
+    -- sounds 
+    sounds ={}
+    load_sound('catch', 'catch.wav')
+    load_sound('land', 'land.wav')
 
     -- sprites n quads 
     sprites = {
@@ -79,6 +83,10 @@ end
 function load_sprite(key, path) 
     sprites[key] = love.graphics.newImage('assets/' .. path)
 end 
+
+function load_sound(key, path)
+    sounds[key] = love.audio.newSource('assets/sound/' .. path, 'static')
+end
 
 function load_quads(key, y_offset, w, h, frames)
     local prfx = split(key, '_')[1]
