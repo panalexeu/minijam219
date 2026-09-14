@@ -1,15 +1,15 @@
 function level_load()
     game_state = 'level'   
     spacebar_ticks = 0
-    lvl = 3
+    lvl = 1
     lvl_gravity = 700
-    firefly_grav_factor = 140 
+    firefly_grav_factor = 100
     firefly_gravity = lvl_gravity / firefly_grav_factor   
 
     -- objects 
     player = frogo:new((game_w / 2) - 8, 0, 21, 16, 100, 250, lvl_gravity)
-    ui = ui:new(0, 0, 3, 10)
-    fireflies = vec_cat(spawn_fireflies(5, 5, 5, 5, 20), spawn_fireflies(395, 5, 5, 5, 20))
+    ui = ui:new(0, 0, 3, 0)
+    fireflies = vec_cat(spawn_fireflies(5, 100, 5, 5, 20), spawn_fireflies(395, 5, 5, 5, 20))
     lightable = fireflies
     updatable = vec_cat(fireflies, {player}) 
 
@@ -140,7 +140,11 @@ function firefly_player_col(i, obj, player)
                 and math.abs(obj.y - player.y) < obj.oy + player.oy
     if col then
         sounds['catch']:play()
+        ui:next_score()
+        --  NOTE: this is really sus, remove from fireflies table only works if first updatable entries are the same fireflies too,
+        -- only if vec_cat(fireflies, {player})
         table.remove(updatable, i)
+        table.remove(fireflies, i)
     end
 end
 
