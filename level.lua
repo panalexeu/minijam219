@@ -7,16 +7,9 @@ function level_load()
     firefly_gravity = lvl_gravity / firefly_grav_factor   
 
     -- objects 
-    player = frogo:new(game_w / 2, game_h / 2, 21, 16, 100, 250, lvl_gravity)
+    player = frogo:new((game_w / 2) - 8, 0, 21, 16, 100, 250, lvl_gravity)
     ui = ui:new(0, 0, 3, 10)
-    fireflies = {
-        firefly:new(15, 15, 8, firefly_gravity),
-        firefly:new(15, 15, 8, firefly_gravity),
-        firefly:new(15, 15, 8, firefly_gravity),
-        firefly:new(32, 32, 8, firefly_gravity),
-        firefly:new(112, game_h-64, 16, firefly_gravity),
-        firefly:new(112, game_h-48, 16, firefly_gravity)
-    }
+    fireflies = vec_cat(spawn_fireflies(5, 5, 5, 5, 20), spawn_fireflies(395, 5, 5, 5, 20))
     lightable = fireflies
     updatable = vec_cat(fireflies, {player}) 
 
@@ -165,4 +158,20 @@ function ticks2jmp_speed(ticks)
     else 
         return ticks / 1000 
     end 
+end 
+
+-- stuff 
+function spawn_fireflies(x, y, dx, dy, count)
+    -- spawn a cluster of fireflies around x,y with deviation [-x,x],[-y,y]
+    local t = {}
+    local signs = {-1, 1}
+    for i=1,count do
+        local sign_x, sign_y = signs[love.math.random(#signs)], signs[love.math.random(#signs)] 
+        local dx, dy = love.math.random(dx), love.math.random(dy)
+        local x, y = x + sign_x * dx, y + sign_y * dy 
+        local fly = firefly:new(x, y, 8, firefly_gravity)
+        table.insert(t, fly)
+    end 
+    print(#t)
+    return t
 end 

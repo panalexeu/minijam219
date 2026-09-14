@@ -46,5 +46,10 @@ function firefly:update(dt)
 end 
 
 function firefly:screen_col()
+    if self.dir_x < 0 then 
+        self.x = self.size 
+    elseif self.dir_x > 0 then 
+        self.x = game_w - self.size
+    end 
     self.dir_x = -self.dir_x
 end
