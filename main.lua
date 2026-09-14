@@ -51,6 +51,10 @@ function love.load()
     fontglyphs = '10'
     load_fontquads(fontglyphs, 8)
 
+    -- shaders (for now turned off) 
+    shader = love.graphics.newShader('shaders/shader.frag')
+    shader = nil 
+
     level_load()
 end 
 
@@ -62,7 +66,8 @@ end
 
 function love.draw()    
     love.graphics.setCanvas(screen)
-    
+    love.graphics.setShader(shader)
+
     if game_state == 'level' then 
         level_draw()
     end 

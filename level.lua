@@ -75,7 +75,7 @@ function level_draw()
             end
         end
         love.graphics.setBlendMode("alpha")
-
+        
         -- draw everything on level that does not emit light  
         love.graphics.setCanvas(screen)
         draw_back()
