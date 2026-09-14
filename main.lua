@@ -12,6 +12,7 @@ function love.load()
     window_w, window_h = 800, 448
     love.window.setMode(window_w, window_h)
     screen = love.graphics.newCanvas(game_w, game_h)
+    -- sreen to window scaling that fits game with offsets: 
     screen_scale = math.min(window_w / game_w, window_h / game_h)
     screen_offset_x = math.floor((window_w - game_w * screen_scale) / 2)
     screen_offset_y = math.floor((window_h - game_h * screen_scale) / 2)
@@ -46,10 +47,8 @@ function love.update(dt)
     end
 end
 
--- todo spend 5 minutes on understanding how resizing actually works 
 function love.draw()    
     love.graphics.setCanvas(screen)
-    love.graphics.clear(0, 0, 0)
     
     if game_state == 'level' then 
         level_draw()
