@@ -142,6 +142,10 @@ function level_keypressed(key)
     if key == 'space' then 
         spacebar_ticks = get_ticks()
     end 
+    if key == 'e' and vending_machine.is_active then 
+        -- TODO continue from here tomorrow 
+        print('player opened shop')
+    end 
 end 
 
 -- collisions 
