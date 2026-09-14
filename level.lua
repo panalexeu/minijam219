@@ -13,8 +13,9 @@ function level_load()
     spawn_x, spawn_y = game_w / 2, 0
     player = frogo:new(spawn_x, spawn_y, 21, 16, 100, 250, lvl_gravity)
     ui = ui:new(0, 0, 3, 0)
+    shop = shop:new(0, 0)
     fireflies = vec_cat(spawn_fireflies(5, 100, 5, 5, 20), spawn_fireflies(395, 5, 5, 5, 20))
-    objects = vec_cat(fireflies, {player}) 
+    objects = vec_cat(fireflies, {player, shop}) 
 
     -- rudimentary lighting system 
     platforms = {

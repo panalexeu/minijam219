@@ -6,6 +6,7 @@ function love.load()
     require "utils"
     require "ui"
     require "score"
+    require "shop"
 
     game_state = "load"
     frames = 60
@@ -42,12 +43,14 @@ function love.load()
     load_sprite('platform2', 'platform2.png') 
     load_sprite('platform3', 'platform3.png') 
     load_sprite('font', 'font.png')
+    load_sprite('shop', 'shop.png')
     load_quads('frogo_idle', 0, 21, 16, 4)
     load_quads('frogo_jump', 1, 21, 16, 1)
     load_quads('frogo_fall', 2, 21, 16, 1)
     load_quads('frogo_land', 3, 21, 16, 2)
     load_quads('ui_jar', 0, 16, 16, 1)
     load_quads('ui_heart', 1, 16, 16, 1)
+    load_quads('shop_sign', 0, 32, 8, 5)
     fontglyphs = '10'
     load_fontquads(fontglyphs, 8)
 
