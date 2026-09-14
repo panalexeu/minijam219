@@ -4,6 +4,7 @@ function love.load()
     require "firefly"
     require "frogo"
     require "utils"
+    require "ui"
 
     game_state = "load"
     game_w, game_h  = 400, 224 
@@ -28,6 +29,7 @@ function love.load()
     quads = {
     }
     load_sprite('frogo', 'frogo.png')
+    load_sprite('ui', 'ui.png')
     load_sprite('platform1', 'platform1.png') 
     load_sprite('platform2', 'platform2.png') 
     load_sprite('platform3', 'platform3.png') 
@@ -35,7 +37,8 @@ function love.load()
     load_quads('frogo_jump', 1, 21, 16, 1)
     load_quads('frogo_fall', 2, 21, 16, 1)
     load_quads('frogo_land', 3, 21, 16, 2)
-
+    load_quads('ui_jar', 0, 16, 16, 1)
+    load_quads('ui_heart', 1, 16, 16, 1)
     level_load()
 end 
 

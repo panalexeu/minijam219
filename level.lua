@@ -8,6 +8,7 @@ function level_load()
 
     -- objects 
     player = frogo:new(game_w / 2, game_h / 2, 21, 16, 100, 250, lvl_gravity)
+    ui = ui:new(0, 0, 3, 10)
     fireflies = {
         firefly:new(15, 15, 8, firefly_gravity),
         firefly:new(15, 15, 8, firefly_gravity),
@@ -78,6 +79,9 @@ function level_draw()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(light_canvas)
     love.graphics.setBlendMode("alpha")
+
+    -- ui 
+    ui:draw()
 end 
 
 -- draw 
