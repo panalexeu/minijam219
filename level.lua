@@ -19,21 +19,21 @@ function level_load()
     updatable = vec_cat(fireflies, {player}) 
 
     -- rudimentary lighting system 
-    backgrounds = {
+    platforms = {
         {
-            sprite = sprites['back1'], 
+            sprite = sprites['platform1'], 
             x = 176,
             w = 48,
             h = 48,
         },
         {
-            sprite = sprites['back2'], 
+            sprite = sprites['platform2'], 
             x = 144,
             w = 112,
             h = 48,
         },
         {
-            sprite = sprites['back3'], 
+            sprite = sprites['platform3'], 
             x = 112,
             w = 176,
             h = 48,
@@ -83,7 +83,7 @@ end
 function draw_back() 
     love.graphics.clear(back_color)
     love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(backgrounds[lvl].sprite, 0, 0, 0, 1, 1)
+    love.graphics.draw(platforms[lvl].sprite, 0, 0, 0, 1, 1)
 end 
 
 -- controls 
@@ -110,10 +110,10 @@ end
 
 -- collisions 
 function player_floor_col(obj)
-    local back = backgrounds[lvl]
-    local floor = (game_h - back.h) - obj.oy
-    local over = obj.x + obj.ox > back.x
-            and obj.x - obj.ox < back.x + back.w
+    local platform = platforms[lvl]
+    local floor = (game_h - platform.h) - obj.oy
+    local over = obj.x + obj.ox > platform.x
+            and obj.x - obj.ox < platform.x + platform.w
 
     if over and obj.vy >= 0 and obj.prev_y <= floor and obj.y >= floor then
         obj:floor_col(floor)
