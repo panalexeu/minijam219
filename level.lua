@@ -10,7 +10,8 @@ function level_load()
     score_gravity = lvl_gravity / score_grav_factor 
 
     -- objects 
-    player = frogo:new((game_w / 2) - 8, 0, 21, 16, 100, 250, lvl_gravity)
+    spawn_x, spawn_y = game_w / 2, 0
+    player = frogo:new(spawn_x, spawn_y, 21, 16, 100, 250, lvl_gravity)
     ui = ui:new(0, 0, 3, 0)
     fireflies = vec_cat(spawn_fireflies(5, 100, 5, 5, 20), spawn_fireflies(395, 5, 5, 5, 20))
     objects = vec_cat(fireflies, {player}) 
@@ -50,6 +51,7 @@ function level_update(dt)
         -- collisions 
         if obj.__baseclass == frogo then 
             player_floor_col(obj)
+            player_fall_col(obj)
         elseif obj.__baseclass == firefly then
             firefly_screen_col(obj)
             firefly_player_col(i, obj, player)
@@ -148,6 +150,12 @@ function player_floor_col(obj)
     end
 end  
 
+function player_fall_col(obj)
+    if (obj.y - obj.oy) >= game_h then 
+        player_respawn()
+    end 
+end 
+
 function firefly_screen_col(obj)
     if (obj.x + obj.ox >= game_w) or (obj.x - obj.ox <= 0) then 
         obj:screen_col()
@@ -204,4 +212,10 @@ function score_cleanup(i, obj)
     if obj.t >= obj.lifetime then 
         table.remove(objects, i)
     end 
+end 
+
+function player_respawn() 
+    player.x, player.y = spawn_x, spawn_y 
+    player.vx, player.vy = 0, 0
+    ui.hearts = ui.hearts - 1
 end 
