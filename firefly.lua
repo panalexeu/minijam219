@@ -14,7 +14,7 @@ function firefly:init(x, y, size, gravity)
     self.vy = self.vx 
     self.t = self.vx -- inner clock that starts from random velocity 
 
-    self.glow_alpha = 0.5 -- glow brightness 
+    self.glow_alpha = 0.75 -- glow brightness 
     self.glow_beta = 2.7 -- blinking speed 
     self.color = {0.8, 1, 0.3, 1}
     local img_data = love.image.newImageData(size, size)

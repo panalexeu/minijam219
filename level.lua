@@ -14,6 +14,7 @@ function level_load()
         firefly:new(15, 15, 8, firefly_gravity),
         firefly:new(15, 15, 8, firefly_gravity),
         firefly:new(32, 32, 8, firefly_gravity),
+        firefly:new(112, game_h-64, 16, firefly_gravity),
         firefly:new(112, game_h-48, 16, firefly_gravity)
     }
     lightable = fireflies
@@ -47,13 +48,14 @@ function level_load()
 end 
 
 function level_update(dt)
-    for _, obj in ipairs(updatable) do 
+    for i, obj in ipairs(updatable) do 
         obj:update(dt)
         -- collisions 
         if obj.__baseclass == frogo then 
             player_floor_col(obj)
         elseif obj.__baseclass == firefly then
             firefly_screen_col(obj)
+            firefly_player_col(i, obj, player)
         end 
     end 
 end 
@@ -137,6 +139,17 @@ function firefly_screen_col(obj)
         obj:screen_col()
     end 
 end 
+
+-- todo think about this tomorrow 5mins
+function firefly_player_col(i, obj, player) 
+    -- AABB overlap (axis-aligned bounding box)
+    local col = math.abs(obj.x - player.x) < obj.ox + player.ox 
+                and math.abs(obj.y - player.y) < obj.oy + player.oy
+    if col then
+        sounds['catch']:play()
+        table.remove(updatable, i)
+    end
+end
 
 -- ticks 
 function get_ticks()
