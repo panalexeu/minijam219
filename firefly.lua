@@ -33,3 +33,7 @@ function firefly:update(dt)
     self.y = self.y + self.dir_y * self.v * dt
     self.dir_y = math.sin(self.x)
 end 
+
+function firefly:screen_col()
+    self.dir_x = -self.dir_x
+end

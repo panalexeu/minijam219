@@ -42,6 +42,7 @@ function level_update(dt)
         if obj.__baseclass == frogo then 
             player_floor_col(obj)
         elseif obj.__baseclass == firefly then
+            firefly_screen_col(obj)
         end 
     end 
 
@@ -95,9 +96,15 @@ function player_floor_col(obj)
             and obj.x - obj.ox < back.x + back.w
 
     if over and obj.vy >= 0 and obj.prev_y <= floor and obj.y >= floor then
-        obj:floor_collide(floor)
+        obj:floor_col(floor)
     end
 end  
+
+function firefly_screen_col(obj)
+    if (obj.x + obj.ox >= game_w) or (obj.x - obj.ox <= 0) then 
+        obj:screen_col()
+    end 
+end 
 
 -- ticks 
 function get_ticks()

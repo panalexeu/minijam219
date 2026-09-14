@@ -39,7 +39,7 @@ function frogo:jump()
     end 
 end
 
-function frogo:floor_collide(y) 
+function frogo:floor_col(y) 
     self.y = y
     self.vx, self.vy = 0, 0
     self.on_ground = true
