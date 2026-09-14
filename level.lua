@@ -9,15 +9,7 @@ function level_load()
     score_grav_factor = 100
     score_gravity = lvl_gravity / score_grav_factor 
 
-    -- objects 
-    spawn_x, spawn_y = game_w / 2, 0
-    player = frogo:new(spawn_x, spawn_y, 21, 16, 100, 250, lvl_gravity)
-    ui = ui:new(0, 0, 3, 0)
-    shop = shop:new(0, 0)
-    fireflies = vec_cat(spawn_fireflies(5, 100, 5, 5, 20), spawn_fireflies(395, 5, 5, 5, 20))
-    objects = vec_cat(fireflies, {player, shop}) 
-
-    -- rudimentary lighting system 
+    -- backgrounds
     platforms = {
         {
             sprite = sprites['platform1'], 
@@ -38,6 +30,17 @@ function level_load()
             h = 48,
         }
     } 
+
+    -- objects 
+    spawn_x, spawn_y = game_w / 2, 0
+    player = frogo:new(spawn_x, spawn_y, 21, 16, 100, 250, lvl_gravity)
+    ui = ui:new(0, 0, 3, 0)
+    shop_x, shop_y = shop_loc(16)
+    vending_machine = shop:new(shop_x, shop_y)
+    fireflies = vec_cat(spawn_fireflies(5, 100, 5, 5, 20), spawn_fireflies(395, 5, 5, 5, 20))
+    objects = vec_cat(fireflies, {vending_machine, player}) 
+
+    -- rudimentary lighting system 
     -- claude suggested these colors 
     ambient_color = {0.62, 0.66, 0.80, 1}   -- pale periwinkle / moonlit lavender-blue
     --back_color    = {0.42, 0.45, 0.58, 1}   -- dusty slate blue
@@ -58,6 +61,8 @@ function level_update(dt)
             firefly_player_col(i, obj, player)
         elseif obj.__baseclass == score then 
             score_cleanup(i, obj)
+        elseif obj.__baseclass == shop then 
+            shop_player_col(obj, player)
         end 
     end 
 end 
@@ -164,11 +169,14 @@ function firefly_screen_col(obj)
 end 
 
 -- todo think about this tomorrow 5mins
-function firefly_player_col(i, obj, player) 
+function obj_overlap(obj, player)
     -- AABB overlap (axis-aligned bounding box)
-    local col = math.abs(obj.x - player.x) < obj.ox + player.ox 
-                and math.abs(obj.y - player.y) < obj.oy + player.oy
-    if col then
+    return math.abs(obj.x - player.x) < obj.ox + player.ox 
+           and math.abs(obj.y - player.y) < obj.oy + player.oy
+end 
+
+function firefly_player_col(i, obj, player) 
+    if obj_overlap(obj, player) then
         -- catch firefly 
         sounds['catch']:play()
         table.remove(objects, i)
@@ -179,6 +187,14 @@ function firefly_player_col(i, obj, player)
         table.insert(objects, s)
     end
 end
+
+function shop_player_col(obj, player)
+    if obj_overlap(obj, player) then 
+        obj.is_active = true 
+    else 
+        obj.is_active = false
+    end
+end 
 
 -- ticks 
 function get_ticks()
@@ -220,3 +236,10 @@ function player_respawn()
     player.vx, player.vy = 0, 0
     ui.hearts = ui.hearts - 1
 end 
+
+function shop_loc(oy)
+    local platform = platforms[lvl]
+    local x = game_w / 2
+    local y = game_h - platform.h - oy
+    return x, y 
+end

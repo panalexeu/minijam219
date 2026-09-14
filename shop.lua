@@ -2,6 +2,10 @@ shop = class:new()
 
 function shop:init(x, y)
     self.x, self.y = x, y 
+    self.w, self.h = 16, 32
+    self.ox, self.oy = self.w/2, self.h/2
+    self.is_active = false
+    self.active_offset = 2 
     
     self.img = sprites['shop']
     self.anim_speed = {
@@ -17,7 +21,10 @@ end
 
 function shop:draw()
     love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(self.img, self.quad, self.x, self.y, 0, 1, 1, 0, 0)
+    if self.is_active then 
+        love.graphics.rectangle('fill', self.x - self.ox - self.active_offset / 2, self.y - self.oy - self.active_offset / 2, self.w + self.active_offset, self.h)
+    end
+    love.graphics.draw(self.img, self.quad, self.x, self.y, 0, 1, 1, self.ox, self.oy)
 end 
 
 -- TODO maybe refactor this to animatable or smth

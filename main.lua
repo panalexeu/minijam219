@@ -50,7 +50,7 @@ function love.load()
     load_quads('frogo_land', 3, 21, 16, 2)
     load_quads('ui_jar', 0, 16, 16, 1)
     load_quads('ui_heart', 1, 16, 16, 1)
-    load_quads('shop_sign', 0, 32, 8, 5)
+    load_quads('shop_sign', 0, 16, 32, 5)
     fontglyphs = '10'
     load_fontquads(fontglyphs, 8)
 
