@@ -164,14 +164,11 @@ end
 function spawn_fireflies(x, y, dx, dy, count)
     -- spawn a cluster of fireflies around x,y with deviation [-x,x],[-y,y]
     local t = {}
-    local signs = {-1, 1}
     for i=1,count do
-        local sign_x, sign_y = signs[love.math.random(#signs)], signs[love.math.random(#signs)] 
-        local dx, dy = love.math.random(dx), love.math.random(dy)
-        local x, y = x + sign_x * dx, y + sign_y * dy 
-        local fly = firefly:new(x, y, 8, firefly_gravity)
+        local ox = love.math.random(-dx, dx)
+        local oy = love.math.random(-dy, dy)
+        local fly = firefly:new(x+ox, y+oy, 8, firefly_gravity)
         table.insert(t, fly)
     end 
-    print(#t)
     return t
 end 
