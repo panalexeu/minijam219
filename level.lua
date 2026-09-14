@@ -36,8 +36,10 @@ function level_load()
     } 
     -- claude suggested these colors 
     ambient_color = {0.62, 0.66, 0.80, 1}   -- pale periwinkle / moonlit lavender-blue
-    back_color    = {0.42, 0.45, 0.58, 1}   -- dusty slate blue
+    --back_color    = {0.42, 0.45, 0.58, 1}   -- dusty slate blue
+    back_color = {0,0,0,1}
     light_canvas = love.graphics.newCanvas(game_w, game_h)
+    canvas_mode = false
 end 
 
 function level_update(dt)
@@ -54,26 +56,34 @@ function level_update(dt)
 end 
 
 function level_draw() 
-    -- draw light_canvas
-    love.graphics.setCanvas(light_canvas) 
-    love.graphics.clear(ambient_color)
-    love.graphics.setBlendMode("add")
-    draw_light(16)
-    for _, obj in ipairs(lightable) do 
-        obj:draw()
+    if canvas_mode then 
+        -- draw light_canvas
+        love.graphics.setCanvas(light_canvas) 
+        love.graphics.clear(ambient_color)
+        love.graphics.setBlendMode("add")
+        draw_light(16)
+        for _, obj in ipairs(lightable) do 
+            obj:draw()
+        end
+        love.graphics.setBlendMode("alpha")
+
+        -- draw everything on level that does not emit light  
+        love.graphics.setCanvas(screen)
+        draw_back()
+        player:draw()
+
+        -- multiply the light_canvas with the level
+        love.graphics.setBlendMode("multiply", "premultiplied") 
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.draw(light_canvas)
+        love.graphics.setBlendMode("alpha")
+    else 
+        draw_back()
+        for _, obj in ipairs(lightable) do 
+            obj:draw()
+        end
+        player:draw()
     end
-    love.graphics.setBlendMode("alpha")
-
-    -- draw everything on level that does not emit light  
-    love.graphics.setCanvas(screen)
-    draw_back()
-    player:draw()
-
-    -- multiply the light_canvas with the level
-    love.graphics.setBlendMode("multiply", "premultiplied") 
-    love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(light_canvas)
-    love.graphics.setBlendMode("alpha")
 
     -- ui 
     ui:draw()
