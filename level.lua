@@ -1,6 +1,24 @@
 function level_load()
     game_state = 'level'   
     spacebar_ticks = 0
+    lvl = 3
+    lvl_gravity = 700
+    firefly_grav_factor = 140 
+    firefly_gravity = lvl_gravity / firefly_grav_factor   
+
+    -- objects 
+    player = frogo:new(game_w / 2, game_h / 2, 21, 16, 100, 250, lvl_gravity)
+    fireflies = {
+        firefly:new(15, 15, 8, firefly_gravity),
+        firefly:new(15, 15, 8, firefly_gravity),
+        firefly:new(15, 15, 8, firefly_gravity),
+        firefly:new(32, 32, 8, firefly_gravity),
+        firefly:new(112, game_h-48, 16, firefly_gravity)
+    }
+    lightable = fireflies
+    updatable = vec_cat(fireflies, {player}) 
+
+    -- rudimentary lighting system 
     backgrounds = {
         {
             sprite = sprites['back1'], 
@@ -21,25 +39,14 @@ function level_load()
             h = 48,
         }
     } 
-    lvl = 3
-    lvl_gravity = 700
-    firefly_grav_factor = 140 
-    firefly_gravity = lvl_gravity / firefly_grav_factor
-    ambient_color = {0.05, 0.05, 0.1}     
-    player = frogo:new(game_w / 2, game_h / 2, 21, 16, 100, 250, lvl_gravity)
-    objects = {
-        -- here comes only objects with draw and update methods implemented 
-        drawable_updatable = {
-            firefly:new(15, 15, 8, firefly_gravity),
-            firefly:new(32, 32, 8, firefly_gravity),
-            firefly:new(128, 128, 8, firefly_gravity),
-            player
-        }
-    }
+    -- claude suggested these colors 
+    ambient_color = {0.45, 0.48, 0.62, 1}
+    back_color = {0.28, 0.30, 0.42, 1}
+    light_canvas = love.graphics.newCanvas(game_w, game_h)
 end 
 
 function level_update(dt)
-    for _, obj in ipairs(objects.drawable_updatable) do 
+    for _, obj in ipairs(updatable) do 
         obj:update(dt)
         -- collisions 
         if obj.__baseclass == frogo then 
@@ -51,16 +58,32 @@ function level_update(dt)
 end 
 
 function level_draw() 
-    love.graphics.print("jump_speed" .. player.vy, 0, 0)
-
-    -- background
+    -- draw light_canvas
+    love.graphics.setCanvas(light_canvas) 
     love.graphics.clear(ambient_color)
+    love.graphics.setBlendMode("add")
+    for _, obj in ipairs(lightable) do 
+        obj:draw()
+    end
+    love.graphics.setBlendMode("alpha")
+
+    -- draw everything on level that does not emit light  
+    love.graphics.setCanvas(screen)
+    draw_back()
+    player:draw()
+
+    -- multiply the light_canvas with the level
+    love.graphics.setBlendMode("multiply", "premultiplied") 
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.draw(light_canvas)
+    love.graphics.setBlendMode("alpha")
+end 
+
+-- draw 
+function draw_back() 
+    love.graphics.clear(back_color)
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(backgrounds[lvl].sprite, 0, 0, 0, 1, 1)
-
-    for _, obj in ipairs(objects.drawable_updatable) do 
-        obj:draw()
-    end 
 end 
 
 -- controls 
