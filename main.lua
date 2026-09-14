@@ -12,6 +12,9 @@ function love.load()
     window_w, window_h = 800, 448
     love.window.setMode(window_w, window_h)
     screen = love.graphics.newCanvas(game_w, game_h)
+    screen_scale = math.min(window_w / game_w, window_h / game_h)
+    screen_offset_x = math.floor((window_w - game_w * screen_scale) / 2)
+    screen_offset_y = math.floor((window_h - game_h * screen_scale) / 2)
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
     -- music 
@@ -53,19 +56,18 @@ function love.draw()
     end 
 
     love.graphics.setCanvas()
-
-    scale = math.min(window_w / game_w, window_h / game_h)
-    offset_x = math.floor((window_w - game_w * scale) / 2)
-    offset_y = math.floor((window_h - game_h * scale) / 2)
-
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(screen, offset_x, offset_y, 0, scale, scale)
+    love.graphics.draw(screen, screen_offset_x, screen_offset_y, 0, screen_scale, screen_scale)
 end 
 
 function love.keypressed(key)
     if game_state == 'level' then 
         level_keypressed(key)
     end 
+
+    if key == 'escape' then
+        love.event.quit(0)
+    end
 end
 
 function love.keyreleased(key)
