@@ -62,6 +62,7 @@ function level_draw()
     love.graphics.setCanvas(light_canvas) 
     love.graphics.clear(ambient_color)
     love.graphics.setBlendMode("add")
+    draw_light(16)
     for _, obj in ipairs(lightable) do 
         obj:draw()
     end
@@ -84,6 +85,13 @@ function draw_back()
     love.graphics.clear(back_color)
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(platforms[lvl].sprite, 0, 0, 0, 1, 1)
+end 
+
+function draw_light(w)
+    love.graphics.setColor(1,1,1,1)
+    local ox = w / 2 
+    local x = (game_w / 2) - ox
+    love.graphics.rectangle('fill', x, 0, w, game_h, 0, 0)
 end 
 
 -- controls 
