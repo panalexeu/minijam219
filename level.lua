@@ -1,7 +1,7 @@
 function level_load()
     game_state = 'level'   
     lvl = 1
-    cur_score = 0
+    cur_score = 10000
     small_blind = 1000 
     big_blind = small_blind * 2
     cur_blind = 0
@@ -329,9 +329,11 @@ function check_gameover()
 end 
 
 function buy_item(item)
-    cur_score = cur_score - item.price
-    table.insert(active_items, item)
-    sounds['purchuase']:play()
+    if contains(item, active_items) == -1 then 
+        cur_score = cur_score - item.price
+        table.insert(active_items, item)
+        sounds['purchuase']:play()
+    end
 end 
 
 -- item handlers 

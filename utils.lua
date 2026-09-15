@@ -37,3 +37,10 @@ function str_vec(vec)
   for i=1,#vec do io.write(vec[i], ' ') end
   print('')
 end 
+
+function contains(item, vec) 
+  for i=1,#vec do  
+    if vec[i] == item then return i end 
+  end
+  return -1 
+end 
