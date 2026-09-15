@@ -1,11 +1,12 @@
 function level_load()
     game_state = 'level'   
     lvl = 1
-    cur_score = 0 
+    cur_score = 10000
     small_blind = 1000 
     big_blind = small_blind * 2
     cur_blind = 0
     -- physics 
+    jump_vx, jump_vy = 100, 250
     lvl_gravity = 750
     firefly_grav_factor = 100
     firefly_gravity = lvl_gravity / firefly_grav_factor
@@ -31,7 +32,7 @@ function level_load()
     t_break = 0 
     firefly_count = 10
     wave_dur = 25 -- secs 
-    wave_break = 10 -- secs
+    wave_break = 5 -- secs
     is_break = true
     wave_dirs = {'left', 'right'}
     wave_dir = next_wave_dir()
@@ -48,7 +49,7 @@ function level_load()
 
     -- objects 
     spawn_x, spawn_y = game_w / 2, 0
-    player = frogo:new(spawn_x, spawn_y, 21, 16, 100, 250, lvl_gravity)
+    player = frogo:new(spawn_x, spawn_y, 21, 16, jump_vx, jump_vy, lvl_gravity)
     coin = coin:new(game_w / 2, game_h / 2) 
     active_items = {}
     menu = menu:new(0, 0, game_w, game_h, items)
@@ -79,6 +80,7 @@ function level_update(dt)
     if t_wave >= wave_dur then 
         t_wave = 0
         is_break = true
+        items_effects_cleanup()
         clear_items()
         clear_fireflies()
         update_score()
@@ -90,6 +92,7 @@ function level_update(dt)
         menu.is_active = false
         wave_start()
         cur_blind = get_blind()
+        -- note: items are notified after batch of fireflies is created
         notify_items()
     end 
 
@@ -356,6 +359,7 @@ function clear_items()
 end 
 
 function handle_heart() 
+    -- increase lives 
     ui.hearts = ui.hearts + 1 
 end
 
@@ -363,13 +367,26 @@ function handle_eye()
 end 
 
 function handle_mult()
+    -- just spaw fireflies again x2 times 
+    local count = firefly_count * wave
+    fireflies = spawn_fireflies(lz_spawn[wave_dir].x, lz_spawn[wave_dir].y, 5, 5, count, lifezones[wave_dir])
+    objects = vec_cat(fireflies, objects)
 end 
 
 function handle_jump()
+    player.jump_vx = jump_vx * 1.5
+    player.jump_vy = jump_vy * 1.5
 end 
 
 function handle_gravity() 
+    player.gravity = lvl_gravity * 0.5
 end 
 
 function handle_equal() 
+end 
+
+function items_effects_cleanup()
+    player.jump_vx = jump_vx
+    player.jump_vy = jump_vy
+    player.gravity = lvl_gravity
 end 
