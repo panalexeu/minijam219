@@ -2,6 +2,9 @@ function level_load()
     game_state = 'level'   
     lvl = 1
     cur_score = 0 
+    small_blind = 1000 
+    big_blind = small_blind * 2
+    cur_blind = 0
     -- physics 
     lvl_gravity = 700
     firefly_grav_factor = 100
@@ -27,8 +30,8 @@ function level_load()
     t_wave = 0 
     t_break = 0 
     firefly_count = 10
-    wave_dur = 5 -- secs 
-    wave_break = 1 -- secs
+    wave_dur = 15 -- secs 
+    wave_break = 5 -- secs
     is_break = true
     wave_dirs = {'left', 'right'}
     wave_dir = next_wave_dir()
@@ -75,10 +78,12 @@ function level_update(dt)
         t_wave = 0
         is_break = true
         clear_fireflies()
+        update_score()
         wave_dir = next_wave_dir()
     elseif t_break >= wave_break then 
         t_break = 0 
         is_break = false 
+        cur_blind = get_blind()
         wave_start()
     end 
 
@@ -136,7 +141,7 @@ function level_draw()
         for _, obj in ipairs(objects) do 
             obj:draw()
         end 
-        print_wave(wave)
+        print_info()
     end
 end 
 
@@ -232,11 +237,11 @@ function get_ticks()
 end 
 
 -- wave logic and stuff
-function print_wave(n) 
-    local color_num = math.floor((n / 10) + 1) 
+function print_info() 
+    local color_num = math.floor((wave / 10) + 1) 
     love.graphics.setColor(wave_colors[color_num])
-    local s = "WAVEx" .. n
-    properprint(s, 0, game_h - 16, 2)
+    local s = "wave*" .. wave .. " " .. "blind*" .. cur_blind .. " " .. "score*" .. cur_score
+    properprint(s, 0, game_h - 8, 1)
 end 
 
 function clear_fireflies()
@@ -287,4 +292,16 @@ end
 
 function next_wave_dir()
     return wave_dirs[love.math.random(#wave_dirs)]
+end 
+
+function get_blind()
+    if wave % 2 == 0 then 
+        return small_blind 
+    else 
+        return big_blind
+    end
+end 
+
+function update_score()
+    cur_score = cur_score - cur_blind
 end 

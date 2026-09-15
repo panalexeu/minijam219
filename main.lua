@@ -70,7 +70,7 @@ function love.load()
     load_quads('icons_platform_r', 7, 8, 8, 1)
     load_quads('icons_equal', 8, 8, 8, 1)
     load_quads('icons_tongue', 9, 8, 8, 1)
-    fontglyphs = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZx'
+    fontglyphs = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ*-'
     load_fontquads(fontglyphs, 8)
 
     -- shaders (for now turned off) 
