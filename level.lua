@@ -2,6 +2,7 @@ function level_load()
     game_state = 'level'   
     lvl = 1
     cur_score = 0 
+    -- physics 
     lvl_gravity = 700
     firefly_grav_factor = 100
     firefly_gravity = lvl_gravity / firefly_grav_factor
@@ -14,6 +15,7 @@ function level_load()
         right = {x1 = (game_w / 2) + lz_offset, x2 = game_w, y1 = nil, y2 = nil}
     }
     lz_spawn = {left = {x = 10, y = 10}, right = {x = 390, y = 10}}
+    -- waves 
     wave =  0
     wave_colors = {
         {1, 1, 1, 1},        -- white
@@ -29,6 +31,7 @@ function level_load()
     wave_break = 1 -- secs
     is_break = true
     wave_dirs = {'left', 'right'}
+    wave_dir = next_wave_dir()
     platforms = {
         {
             sprite = sprites['platform1'], 
@@ -43,6 +46,7 @@ function level_load()
     spawn_x, spawn_y = game_w / 2, 0
     player = frogo:new(spawn_x, spawn_y, 21, 16, 100, 250, lvl_gravity)
     coin = coin:new(game_w / 2, game_h / 2) 
+    active_item = nil
     menu = menu:new(game_w / 2, game_h / 2, 200, 100, {})
     ui = ui:new(0, 0, 3, 0)
     shop_x, shop_y = shop_loc(16)
@@ -71,6 +75,7 @@ function level_update(dt)
         t_wave = 0
         is_break = true
         clear_fireflies()
+        wave_dir = next_wave_dir()
     elseif t_break >= wave_break then 
         t_break = 0 
         is_break = false 
@@ -275,8 +280,11 @@ end
 
 function wave_start()
     wave = wave + 1
-    local dir = wave_dirs[love.math.random(#wave_dirs)]
     local count = firefly_count * wave
-    fireflies = spawn_fireflies(lz_spawn[dir].x, lz_spawn[dir].y, 5, 5, count, lifezones[dir])
+    fireflies = spawn_fireflies(lz_spawn[wave_dir].x, lz_spawn[wave_dir].y, 5, 5, count, lifezones[wave_dir])
     objects = vec_cat(fireflies, other_objects)
+end 
+
+function next_wave_dir()
+    return wave_dirs[love.math.random(#wave_dirs)]
 end 
