@@ -31,7 +31,7 @@ function level_load()
     t_break = 0 
     firefly_count = 10
     wave_dur = 25 -- secs 
-    wave_break = 5 -- secs
+    wave_break = 10 -- secs
     is_break = true
     wave_dirs = {'left', 'right'}
     wave_dir = next_wave_dir()
@@ -245,10 +245,9 @@ function firefly_player_col(i, obj, player)
         -- :clone so plays multiple times every time catch happened 
         sounds['catch']:clone():play()  
         table.remove(objects, i)
-        -- update score
-        local n = 1000
-        cur_score = cur_score + n
-        local s = score:new(n, player.x, player.y, score_gravity)
+        -- update score 
+        cur_score = cur_score + obj.score
+        local s = score:new(obj.score, player.x, player.y, score_gravity)
         table.insert(objects, s)
     end
 end

@@ -15,6 +15,7 @@ function firefly:init(x, y, size, gravity, lifezone)
     self.vy = self.vx 
     self.t = self.vx -- inner clock that starts from random velocity 
     self.lt = 0 -- inner lifetime clock 
+    self.score = 1000 
 
     self.glow_alpha = 0.75 -- glow brightness 
     self.glow_beta = 2.7 -- blinking speed 
