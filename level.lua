@@ -179,6 +179,11 @@ function level_keypressed(key)
     if key == 'e' and vending_machine.is_active then 
         menu.is_active = not menu.is_active
     end 
+
+    -- menu controls 
+    if key == 'up' and vending_machine.is_active then menu:decr_idx() end
+    if key == 'down' and vending_machine.is_active then menu:incr_idx() end
+    if key == 'return' and vending_machine.is_active then buy_item(menu.cur_item) end 
 end 
 
 -- collisions 
@@ -310,4 +315,9 @@ end
 
 function check_gameover() 
     if ui.hearts == 0 or cur_score < 0 then game_state = 'gameover' end 
+end 
+
+function buy_item(item)
+    cur_score = cur_score - item.price
+    table.insert(active_items, item)
 end 

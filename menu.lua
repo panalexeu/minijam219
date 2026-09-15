@@ -8,6 +8,8 @@ function menu:init(x, y, w, h, items)
     self.item_offset = 16
     self.item_scale = 2
     self.menu_color = {0.22, 0.24, 0.40, 1}
+    self.idx = 1
+    self.cur_item = self.items[self.idx]
 end 
 
 function menu:update(dt)
@@ -22,10 +24,26 @@ function menu:draw()
         -- draw menu items 
         love.graphics.setColor(1,1,1,1)
         for i,item in ipairs(items) do 
+            -- draw item + description + price
             local x, y = x_rect + self.item_offset / 4, y_rect + (i-1) * self.item_offset
             love.graphics.draw(item.img, item.quad, x, y, 0, self.item_scale, self.item_scale, 0, 0)
             local s = item.description .. ' x ' .. item.price
             properprint(s, x + self.item_offset, y + self.item_offset / 4, 1.0)
+            -- draw selection box 
+            if i == self.idx then 
+                love.graphics.setColor(1,1,1,1)
+                love.graphics.rectangle('line', x, y, self.w - self.item_offset / 4, self.item_offset)
+            end  
         end 
     end 
+end 
+
+function menu:incr_idx()
+    self.idx = self.idx + 1 
+    if self.idx > #items then self.idx = 1 end 
+end 
+
+function menu:decr_idx()
+    self.idx = self.idx - 1
+    if self.idx < 1 then self.idx = #items end 
 end 
