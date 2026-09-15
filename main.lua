@@ -53,7 +53,7 @@ function love.load()
     load_quads('ui_heart', 1, 16, 16, 1)
     load_quads('shop_sign', 0, 16, 32, 5)
     load_quads('hotkeys_e', 0, 16, 16, 1)
-    fontglyphs = '10'
+    fontglyphs = '0123456789ABCDEFGHJKLMNOPQRSTUWXYZx'
     load_fontquads(fontglyphs, 8)
 
     -- shaders (for now turned off) 

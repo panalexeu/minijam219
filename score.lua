@@ -7,7 +7,7 @@ function score:init(n,x,y,gravity)
     self.gravity = gravity
     self.t = 0 
     self.lifetime = 3 
-    self.scale = 0.5
+    self.scale = 0.6
 end
 
 function score:draw() 
