@@ -60,16 +60,16 @@ function love.load()
     load_quads('shop_sign', 0, 16, 32, 5)
     load_quads('hotkeys_e', 0, 16, 16, 1)
     load_quads('coin_flip', 0, 16, 16, 8)
-    load_quads('icons_heart', 0, 16, 64, 1)
-    load_quads('icons_eye', 1, 16, 64, 1)
-    load_quads('icons_mult', 2, 16, 64, 1)
-    load_quads('icons_jump', 3, 16, 64, 1)
-    load_quads('icons_gravity', 4, 16, 64, 1)
-    load_quads('icons_magnetic', 5, 16, 64, 1)
-    load_quads('icons_platform_l', 6, 16, 64, 1)
-    load_quads('icons_platform_r', 7, 16, 64, 1)
-    load_quads('icons_equal', 8, 16, 64, 1)
-    load_quads('icons_tongue', 9, 16, 64, 1)
+    load_quads('icons_heart', 0, 8, 8, 1)
+    load_quads('icons_eye', 1, 8, 8, 1)
+    load_quads('icons_mult', 2, 8, 8, 1)
+    load_quads('icons_jump', 3, 8, 8, 1)
+    load_quads('icons_gravity', 4, 8, 8, 1)
+    load_quads('icons_magnetic', 5, 8, 8, 1)
+    load_quads('icons_platform_l', 6, 8, 8, 1)
+    load_quads('icons_platform_r', 7, 8, 8, 1)
+    load_quads('icons_equal', 8, 8, 8, 1)
+    load_quads('icons_tongue', 9, 8, 8, 1)
     fontglyphs = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZx'
     load_fontquads(fontglyphs, 8)
 
@@ -125,6 +125,12 @@ function load_sound(key, path)
 end
 
 function load_quads(key, y_offset, w, h, frames)
+-- key      - name for this animation, e.g. 'frogo_idle'. The part before the
+--            first underscore selects the sheet from `sprites` ('frogo').
+-- y_offset - which row of the sheet to read, counted in tiles, not pixels
+--            (0 = top row, 1 = second row, ...).
+-- w, h     - size of a single frame in pixels.
+-- frames   - how many frames to read from that row, left to righ
     local prfx = split(key, '_')[1]
     local img = sprites[prfx]
     local t = {}

@@ -6,5 +6,5 @@ function item:init(name, description, price, icon)
     self.price = price 
     self.icon = icon 
     self.img = sprites['icons']
-    self.quad = quads[self.icon]
+    self.quad = quads[self.icon][1]
 end 
