@@ -22,9 +22,12 @@ function level_load()
         {1, 0.85, 0.3, 1},   -- yellow
         {0.65, 0.4, 0.9, 1}, -- purple
     }
-    t = 0 -- inner level timer 
+    t_wave = 0 
+    t_break = 0 
     firefly_count = 10
-    wave_dur = 30 -- secs 
+    wave_dur = 5 -- secs 
+    wave_break = 1 -- secs
+    is_break = true
     wave_dirs = {'left', 'right'}
     platforms = {
         {
@@ -53,18 +56,23 @@ function level_load()
     back_color = {0,0,0,1}
     light_canvas = love.graphics.newCanvas(game_w, game_h)
     canvas_mode = false
-
-    -- start first wave 
-    wave_start()
 end 
 
 function level_update(dt)
-    t = t + dt 
-
-    -- wave updates 
-    if t >= wave_dur then 
-        t = 0
+    -- timers 
+    if is_break then 
+        t_break = t_break + dt
+    else
+        t_wave = t_wave + dt 
+    end
+ 
+    if t_wave >= wave_dur then 
+        t_wave = 0
+        is_break = true
         clear_fireflies()
+    elseif t_break >= wave_break then 
+        t_break = 0 
+        is_break = false 
         wave_start()
     end 
 
