@@ -88,8 +88,8 @@ function level_update(dt)
         t_break = 0 
         is_break = false 
         menu.is_active = false
-        cur_blind = get_blind()
         wave_start()
+        cur_blind = get_blind()
         notify_items()
     end 
 
@@ -318,11 +318,13 @@ function next_wave_dir()
 end 
 
 function get_blind()
-    if wave % 2 == 0 then 
-        return small_blind 
+    local temp = nil
+    if wave % 2 == 1 then 
+        temp = small_blind 
     else 
-        return big_blind
+        temp = big_blind
     end
+    return temp * wave
 end 
 
 function update_score()
