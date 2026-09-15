@@ -167,7 +167,7 @@ end
 function load_items() 
     items = {
         item:new('heart', 'just an additional heart', 1000, 'icons_heart'), 
-        item:new('eye', 'reveal next wave direction!', 2000, 'icons_eye'), 
+        -- item:new('eye', 'reveal next wave direction!', 2000, 'icons_eye'), 
         item:new('mult', 'multiply the amount of fireflies by 2!', 4000, 'icons_mult'), 
         item:new('jump', 'increase frogo jump speed!', 1000, 'icons_jump'),
         item:new('gravity', 'decrease gravity!', 1000, 'icons_gravity'), 

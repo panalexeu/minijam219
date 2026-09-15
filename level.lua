@@ -363,9 +363,6 @@ function handle_heart()
     ui.hearts = ui.hearts + 1 
 end
 
-function handle_eye()
-end 
-
 function handle_mult()
     -- just spaw fireflies again x2 times 
     local count = firefly_count * wave
@@ -386,7 +383,9 @@ function handle_equal()
 end 
 
 function items_effects_cleanup()
+    -- jump effect 
     player.jump_vx = jump_vx
     player.jump_vy = jump_vy
+    -- gravity effect 
     player.gravity = lvl_gravity
 end 
