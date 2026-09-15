@@ -1,7 +1,7 @@
 function level_load()
     game_state = 'level'   
     lvl = 1
-    cur_score = 100000
+    cur_score = 0
     small_blind = 1000 
     big_blind = small_blind * 2
     cur_blind = 0
