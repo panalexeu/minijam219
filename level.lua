@@ -8,7 +8,12 @@ function level_load()
     firefly_gravity = lvl_gravity / firefly_grav_factor
     score_grav_factor = 100
     score_gravity = lvl_gravity / score_grav_factor 
-
+    -- fireflies lifezones {x1, x2, y1, y2}
+    lz_offset = 32
+    lifezones = {
+        left = {x1 = 0, x2 = (game_w / 2) - lz_offset, y1 = nil, y2 = nil},
+        right = {x1 = (game_w / 2) + lz_offset, x2 = game_w, y1 = nil, y2 = nil}
+    }
     -- backgrounds
     platforms = {
         {
@@ -37,7 +42,7 @@ function level_load()
     ui = ui:new(0, 0, 3, 0)
     shop_x, shop_y = shop_loc(16)
     vending_machine = shop:new(shop_x, shop_y)
-    fireflies = vec_cat(spawn_fireflies(10, 100, 5, 5, 20), {})
+    fireflies = vec_cat(spawn_fireflies(10, 10, 5, 5, 20, lifezones.left), spawn_fireflies(390, 10, 5, 5, 20, lifezones.right))
     objects = vec_cat(fireflies, {vending_machine, player}) 
 
     -- rudimentary lighting system 
@@ -57,7 +62,7 @@ function level_update(dt)
             player_floor_col(obj)
             player_fall_col(obj)
         elseif obj.__baseclass == firefly then
-            firefly_screen_col(obj)
+            firefly_lz_col(obj)
             firefly_player_col(i, obj, player)
         elseif obj.__baseclass == score then 
             score_cleanup(i, obj)
@@ -166,9 +171,9 @@ function player_fall_col(obj)
     end 
 end 
 
-function firefly_screen_col(obj)
-    if (obj.x + obj.ox >= game_w) or (obj.x - obj.ox <= 0) then 
-        obj:screen_col()
+function firefly_lz_col(obj)
+    if (obj.x - obj.ox <= obj.lz.x1)  or (obj.x + obj.ox >= obj.lz.x2) then 
+        obj:lz_col()
     end 
 end 
 
@@ -217,13 +222,13 @@ function ticks2jmp_speed(ticks)
 end 
 
 -- stuff 
-function spawn_fireflies(x, y, dx, dy, count)
+function spawn_fireflies(x, y, dx, dy, count, lifezone)
     -- spawn a cluster of fireflies around x,y with deviation [-x,x],[-y,y]
     local t = {}
     for i=1,count do
         local ox = love.math.random(-dx, dx)
         local oy = love.math.random(-dy, dy)
-        local fly = firefly:new(x+ox, y+oy, 8, firefly_gravity)
+        local fly = firefly:new(x+ox, y+oy, 8, firefly_gravity, lifezone)
         table.insert(t, fly)
     end 
     return t

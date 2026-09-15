@@ -1,10 +1,11 @@
 firefly = class:new()
 
-function firefly:init(x, y, size, gravity)
+function firefly:init(x, y, size, gravity, lifezone)
     self.x, self.y = x, y 
     self.ox, self.oy = size / 2,  size / 2
     self.size = size 
     self.gravity = gravity 
+    self.lz = lifezone
 
     self.dirs = {-1, 1}
     self.dir_x = self.dirs[love.math.random(#self.dirs)]    
@@ -13,6 +14,7 @@ function firefly:init(x, y, size, gravity)
     self.vx = self.velocities[love.math.random(#self.velocities)]
     self.vy = self.vx 
     self.t = self.vx -- inner clock that starts from random velocity 
+    self.lt = 0 -- inner lifetime clock 
 
     self.glow_alpha = 0.75 -- glow brightness 
     self.glow_beta = 2.7 -- blinking speed 
@@ -41,15 +43,17 @@ function firefly:update(dt)
     self.y = self.y + self.dir_y * self.vy * dt
     self.dir_y = math.sin(self.x)
     
-    -- inner clock
+    -- inner clocks
     self.t = self.t + dt 
+    self.lt = self.lt + dt 
 end 
 
-function firefly:screen_col()
+function firefly:lz_col()
     if self.dir_x < 0 then 
-        self.x = self.size 
+        self.x = self.lz.x1 + self.size 
     elseif self.dir_x > 0 then 
-        self.x = game_w - self.size
+        self.x = self.lz.x2 - self.size
     end 
+
     self.dir_x = -self.dir_x
 end
