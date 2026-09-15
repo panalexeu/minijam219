@@ -44,6 +44,7 @@ function level_load()
             h = 48,
         }
     } 
+    -- items params 
 
     -- objects 
     spawn_x, spawn_y = game_w / 2, 0
@@ -73,18 +74,22 @@ function level_update(dt)
     else
         t_wave = t_wave + dt 
     end
- 
+    
+    -- wave finished 
     if t_wave >= wave_dur then 
         t_wave = 0
         is_break = true
+        clear_items()
         clear_fireflies()
         update_score()
         wave_dir = next_wave_dir()
+    -- break finished 
     elseif t_break >= wave_break then 
         t_break = 0 
         is_break = false 
         cur_blind = get_blind()
         wave_start()
+        notify_items()
     end 
 
     -- objects updates
@@ -330,4 +335,39 @@ end
 function buy_item(item)
     cur_score = cur_score - item.price
     table.insert(active_items, item)
+end 
+
+-- item handlers 
+function notify_items()
+    for i,item in ipairs(active_items) do 
+        if item.name == 'heart' then handle_heart() end 
+        if item.name == 'eye' then handle_eye() end 
+        if item.name == 'mult' then handle_mult() end 
+        if item.name == 'jump' then handle_jump() end 
+        if item.name == 'gravity' then handle_gravity() end 
+        if item.name == 'equal' then handle_equal() end 
+    end 
+end
+
+function clear_items()
+    active_items = {}
+end 
+
+function handle_heart() 
+    ui.hearts = ui.hearts + 1 
+end
+
+function handle_eye()
+end 
+
+function handle_mult()
+end 
+
+function handle_jump()
+end 
+
+function handle_gravity() 
+end 
+
+function handle_equal() 
 end 
