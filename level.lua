@@ -1,7 +1,6 @@
 function level_load()
     game_state = 'level'   
     lvl = 1
-    wave =  1
     cur_score = 0 
     lvl_gravity = 700
     firefly_grav_factor = 100
@@ -14,24 +13,25 @@ function level_load()
         left = {x1 = 0, x2 = (game_w / 2) - lz_offset, y1 = nil, y2 = nil},
         right = {x1 = (game_w / 2) + lz_offset, x2 = game_w, y1 = nil, y2 = nil}
     }
-    -- backgrounds
+    lz_spawn = {left = {x = 10, y = 10}, right = {x = 390, y = 10}}
+    wave =  0
+    wave_colors = {
+        {1, 1, 1, 1},        -- white
+        {0.3, 0.9, 0.4, 1},  -- green
+        {0.9, 0.25, 0.3, 1}, -- red
+        {1, 0.85, 0.3, 1},   -- yellow
+        {0.65, 0.4, 0.9, 1}, -- purple
+    }
+    t = 0 -- inner level timer 
+    firefly_count = 10
+    wave_dur = 30 -- secs 
+    wave_dirs = {'left', 'right'}
     platforms = {
         {
             sprite = sprites['platform1'], 
+            -- platform colision offsets
             x = 176,
             w = 48,
-            h = 48,
-        },
-        {
-            sprite = sprites['platform2'], 
-            x = 144,
-            w = 112,
-            h = 48,
-        },
-        {
-            sprite = sprites['platform3'], 
-            x = 112,
-            w = 176,
             h = 48,
         }
     } 
@@ -39,11 +39,12 @@ function level_load()
     -- objects 
     spawn_x, spawn_y = game_w / 2, 0
     player = frogo:new(spawn_x, spawn_y, 21, 16, 100, 250, lvl_gravity)
+    coin = coin:new(game_w / 2, game_h / 2)  
     ui = ui:new(0, 0, 3, 0)
     shop_x, shop_y = shop_loc(16)
     vending_machine = shop:new(shop_x, shop_y)
-    fireflies = vec_cat(spawn_fireflies(10, 10, 5, 5, 20, lifezones.left), spawn_fireflies(390, 10, 5, 5, 20, lifezones.right))
-    objects = vec_cat(fireflies, {vending_machine, player}) 
+    other_objects = {vending_machine, player} 
+    objects = other_objects
 
     -- rudimentary lighting system 
     -- claude suggested these colors 
@@ -52,9 +53,22 @@ function level_load()
     back_color = {0,0,0,1}
     light_canvas = love.graphics.newCanvas(game_w, game_h)
     canvas_mode = false
+
+    -- start first wave 
+    wave_start()
 end 
 
 function level_update(dt)
+    t = t + dt 
+
+    -- wave updates 
+    if t >= wave_dur then 
+        t = 0
+        clear_fireflies()
+        wave_start()
+    end 
+
+    -- objects updates
     for i, obj in ipairs(objects) do 
         obj:update(dt)
         -- collisions 
@@ -207,17 +221,20 @@ function get_ticks()
     return math.floor(love.timer.getTime() * 1000)
 end 
 
--- stuff 
-function spawn_fireflies(x, y, dx, dy, count, lifezone)
-    -- spawn a cluster of fireflies around x,y with deviation [-x,x],[-y,y]
-    local t = {}
-    for i=1,count do
-        local ox = love.math.random(-dx, dx)
-        local oy = love.math.random(-dy, dy)
-        local fly = firefly:new(x+ox, y+oy, 8, firefly_gravity, lifezone)
-        table.insert(t, fly)
-    end 
-    return t
+-- wave logic and stuff
+function print_wave(n) 
+    local color_num = math.floor((n / 10) + 1) 
+    love.graphics.setColor(wave_colors[color_num])
+    local s = "WAVEx" .. n
+    properprint(s, 0, game_h - 16, 2)
+end 
+
+function clear_fireflies()
+    for i, obj in ipairs(objects) do
+        if obj.__baseclass == firefly then  
+            table.remove(objects, i)
+        end
+    end
 end 
 
 function score_cleanup(i, obj)
@@ -239,8 +256,22 @@ function shop_loc(oy)
     return x, y 
 end
 
--- wave logic 
-function print_wave(n) 
-    local s = "WAVEx" .. n
-    properprint(s, 0, 0, 2)
+function spawn_fireflies(x, y, dx, dy, count, lifezone)
+    -- spawn a cluster of fireflies around x,y with deviation [-x,x],[-y,y]
+    local t = {}
+    for i=1,count do
+        local ox = love.math.random(-dx, dx)
+        local oy = love.math.random(-dy, dy)
+        local fly = firefly:new(x+ox, y+oy, 8, firefly_gravity, lifezone)
+        table.insert(t, fly)
+    end 
+    return t
+end 
+
+function wave_start()
+    wave = wave + 1
+    local dir = wave_dirs[love.math.random(#wave_dirs)]
+    local count = firefly_count * wave
+    fireflies = spawn_fireflies(lz_spawn[dir].x, lz_spawn[dir].y, 5, 5, count, lifezones[dir])
+    objects = vec_cat(fireflies, other_objects)
 end 
