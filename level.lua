@@ -172,7 +172,6 @@ function firefly_screen_col(obj)
     end 
 end 
 
--- todo think about this tomorrow 5mins
 function obj_overlap(obj, player)
     -- AABB overlap (axis-aligned bounding box)
     return math.abs(obj.x - player.x) < obj.ox + player.ox 
