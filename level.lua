@@ -5,6 +5,7 @@ function level_load()
     small_blind = 1000 
     big_blind = small_blind * 2
     cur_blind = 0
+    flies_counter = 0 
     -- physics 
     jump_vx, jump_vy = 100, 250
     lvl_gravity = 750
@@ -32,7 +33,7 @@ function level_load()
     t_break = 0 
     firefly_count = 10
     wave_dur = 25 -- secs 
-    wave_break = 5 -- secs
+    wave_break = 10 -- secs
     is_break = true
     wave_dirs = {'left', 'right'}
     wave_dir = next_wave_dir()
@@ -89,12 +90,14 @@ function level_update(dt)
     end 
 
     -- objects updates
+    flies_counter = 0 
     for i, obj in ipairs(objects) do 
         obj:update(dt)
         -- collisions 
         if obj.__baseclass == frogo then 
             player_fall_col(obj)
         elseif obj.__baseclass == firefly then
+            flies_counter = flies_counter + 1
             firefly_lz_col(obj)
             firefly_player_col(i, obj, player)
         elseif obj.__baseclass == score then 
@@ -104,6 +107,11 @@ function level_update(dt)
         elseif obj.__baseclass == platform then 
             player_platform_col(player, obj)
         end 
+    end 
+
+    -- player consumed all flies start early 
+    if flies_counter == 0 and not is_break then 
+        t_wave = wave_dur
     end 
 
     check_gameover()
