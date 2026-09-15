@@ -75,7 +75,7 @@ function level_update(dt)
         t_wave = t_wave + dt 
     end
     
-    -- wave finished 
+    -- wave finished: break starts 
     if t_wave >= wave_dur then 
         t_wave = 0
         is_break = true
@@ -83,10 +83,11 @@ function level_update(dt)
         clear_fireflies()
         update_score()
         wave_dir = next_wave_dir()
-    -- break finished 
+    -- break finished: wave starts  
     elseif t_break >= wave_break then 
         t_break = 0 
         is_break = false 
+        menu.is_active = false
         cur_blind = get_blind()
         wave_start()
         notify_items()
