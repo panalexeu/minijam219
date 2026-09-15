@@ -1,6 +1,5 @@
 function level_load()
     game_state = 'level'   
-    spacebar_ticks = 0
     lvl = 1
     cur_score = 0 
     lvl_gravity = 700
@@ -131,7 +130,6 @@ end
 function level_keyreleased(key)
     if key == 'space' then 
         player:jump()
-        spacebar_ticks = 0
     end 
 end
 
@@ -143,9 +141,6 @@ function level_keypressed(key)
     if key == 'a' then 
         -- face left 
         player.dir_x = 1
-    end 
-    if key == 'space' then 
-        spacebar_ticks = get_ticks()
     end 
     if key == 'e' and vending_machine.is_active then 
         -- TODO continue from here tomorrow 
@@ -208,17 +203,6 @@ end
 -- ticks 
 function get_ticks()
     return math.floor(love.timer.getTime() * 1000)
-end 
-
-function ticks2jmp_speed(ticks)
-    -- play with this 
-    if ticks <= 1000 then 
-        return 1.0 
-    elseif ticks >= 3000 then
-        return 3.0
-    else 
-        return ticks / 1000 
-    end 
 end 
 
 -- stuff 
