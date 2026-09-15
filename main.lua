@@ -10,6 +10,7 @@ function love.load()
     require "shop"
     require "coin"
     require "menu"
+    require "item"
 
     game_state = "load"
     frames = 60
@@ -49,6 +50,7 @@ function love.load()
     load_sprite('shop', 'shop.png')
     load_sprite('hotkeys', 'hotkeys.png')
     load_sprite('coin', 'coin.png')
+    load_sprite('icons', 'icons.png')
     load_quads('frogo_idle', 0, 21, 16, 4)
     load_quads('frogo_jump', 1, 21, 16, 1)
     load_quads('frogo_fall', 2, 21, 16, 1)
@@ -58,6 +60,16 @@ function love.load()
     load_quads('shop_sign', 0, 16, 32, 5)
     load_quads('hotkeys_e', 0, 16, 16, 1)
     load_quads('coin_flip', 0, 16, 16, 8)
+    load_quads('icons_heart', 0, 16, 64, 1)
+    load_quads('icons_eye', 1, 16, 64, 1)
+    load_quads('icons_mult', 2, 16, 64, 1)
+    load_quads('icons_jump', 3, 16, 64, 1)
+    load_quads('icons_gravity', 4, 16, 64, 1)
+    load_quads('icons_magnetic', 5, 16, 64, 1)
+    load_quads('icons_platform_l', 6, 16, 64, 1)
+    load_quads('icons_platform_r', 7, 16, 64, 1)
+    load_quads('icons_equal', 8, 16, 64, 1)
+    load_quads('icons_tongue', 9, 16, 64, 1)
     fontglyphs = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZx'
     load_fontquads(fontglyphs, 8)
 
@@ -65,6 +77,7 @@ function love.load()
     shader = love.graphics.newShader('shaders/shader.frag')
     shader = nil 
 
+    items = load_items()
     level_load()
 end 
 
@@ -142,3 +155,19 @@ function properprint(s, x, y, scale)
 		end
 	end
 end
+
+function load_items() 
+    items = {
+        item:new('heart', 'just an additional heart that will save you in case of a fall', 1000, 'icons_heart'), 
+        item:new('eye', 'reveal next wave direction!', 2000, 'icons_eye'), 
+        item:new('mult', 'multiply the amount of fireflies by 2!', 4000, 'icons_mult'), 
+        item:new('jump', 'increase frogo jump speed!', 1000, 'icons_jump'),
+        item:new('gravity', 'decrease gravity!', 1000, 'icons_gravity'), 
+        item:new('magnetic', 'magnet fireflies!', 1000, 'icons_magnetic'), 
+        item:new('platform_l', 'build a platform on left!', 4000, 'icons_platform_l'), 
+        item:new('platform_r', 'build a platform on right!', 4000, 'icons_platform_r'), 
+        item:new('icons_equal', 'fireflies share the same gravity!', 1000, 'icons_equal'), 
+        item:new('icons_tongue', 'catch fireflies with a tongue!', 4000, 'icons_tongue')
+    }
+    return items 
+end 

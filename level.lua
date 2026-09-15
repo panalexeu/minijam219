@@ -46,7 +46,7 @@ function level_load()
     spawn_x, spawn_y = game_w / 2, 0
     player = frogo:new(spawn_x, spawn_y, 21, 16, 100, 250, lvl_gravity)
     coin = coin:new(game_w / 2, game_h / 2) 
-    active_item = nil
+    active_items = {}
     menu = menu:new(game_w / 2, game_h / 2, 200, 100, {})
     ui = ui:new(0, 0, 3, 0)
     shop_x, shop_y = shop_loc(16)
