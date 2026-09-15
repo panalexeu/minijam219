@@ -151,7 +151,7 @@ end
 function properprint(s, x, y, scale)
     local startx = x
 	for i = 1, string.len(tostring(s)) do
-		local char = string.sub(s, i, i)
+		local char = string.sub(string.upper(s), i, i)
 		if char == "|" then
 			x = startx-(i*8)*scale
 			y = y + 10*scale
@@ -164,7 +164,7 @@ end
 
 function load_items() 
     items = {
-        item:new('heart', 'just an additional heart that will save you in case of a fall', 1000, 'icons_heart'), 
+        item:new('heart', 'just an additional heart', 1000, 'icons_heart'), 
         item:new('eye', 'reveal next wave direction!', 2000, 'icons_eye'), 
         item:new('mult', 'multiply the amount of fireflies by 2!', 4000, 'icons_mult'), 
         item:new('jump', 'increase frogo jump speed!', 1000, 'icons_jump'),
