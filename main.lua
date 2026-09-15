@@ -32,8 +32,10 @@ function love.load()
     end
     -- sounds 
     sounds ={}
+    load_sound('start', 'start.wav')
     load_sound('catch', 'catch.wav')
     load_sound('land', 'land.wav')
+    load_sound('purchuase', 'purchuase.wav')
 
     -- sprites n quads 
     sprites = {

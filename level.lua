@@ -172,7 +172,7 @@ function draw_active_items()
 end 
 
 function draw_info() 
-    local color_num = math.floor((wave / 10) + 1) 
+    local color_num = math.floor((wave / #wave_colors) + 1) 
     love.graphics.setColor(wave_colors[color_num])
     local s = "wave*" .. wave .. " " .. "blind*" .. cur_blind .. " " .. "score*" .. cur_score .. " " .. "break*" .. tostring(is_break)
     properprint(s, 0, game_h - 8, 1)
@@ -301,6 +301,7 @@ end
 function wave_start()
     wave = wave + 1
     local count = firefly_count * wave
+    sounds['start']:play()
     fireflies = spawn_fireflies(lz_spawn[wave_dir].x, lz_spawn[wave_dir].y, 5, 5, count, lifezones[wave_dir])
     objects = vec_cat(fireflies, other_objects)
 end 
@@ -330,6 +331,7 @@ end
 function buy_item(item)
     cur_score = cur_score - item.price
     table.insert(active_items, item)
+    sounds['purchuase']:play()
 end 
 
 -- item handlers 
