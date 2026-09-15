@@ -8,6 +8,7 @@ function love.load()
     require "ui"
     require "score"
     require "shop"
+    require "coin"
 
     game_state = "load"
     frames = 60
@@ -46,6 +47,7 @@ function love.load()
     load_sprite('font', 'font.png')
     load_sprite('shop', 'shop.png')
     load_sprite('hotkeys', 'hotkeys.png')
+    load_sprite('coin', 'coin.png')
     load_quads('frogo_idle', 0, 21, 16, 4)
     load_quads('frogo_jump', 1, 21, 16, 1)
     load_quads('frogo_fall', 2, 21, 16, 1)
@@ -54,6 +56,7 @@ function love.load()
     load_quads('ui_heart', 1, 16, 16, 1)
     load_quads('shop_sign', 0, 16, 32, 5)
     load_quads('hotkeys_e', 0, 16, 16, 1)
+    load_quads('coin_flip', 0, 16, 16, 8)
     fontglyphs = '0123456789ABCDEFGHJKLMNOPQRSTUWXYZx'
     load_fontquads(fontglyphs, 8)
 
