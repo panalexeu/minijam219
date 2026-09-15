@@ -57,7 +57,7 @@ function love.load()
     load_quads('shop_sign', 0, 16, 32, 5)
     load_quads('hotkeys_e', 0, 16, 16, 1)
     load_quads('coin_flip', 0, 16, 16, 8)
-    fontglyphs = '0123456789ABCDEFGHJKLMNOPQRSTUWXYZx'
+    fontglyphs = '0123456789ABCDEFGHJKLMNOPQRSTUVWXYZx'
     load_fontquads(fontglyphs, 8)
 
     -- shaders (for now turned off) 

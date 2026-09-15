@@ -1,6 +1,7 @@
 function level_load()
     game_state = 'level'   
     lvl = 1
+    wave =  1
     cur_score = 0 
     lvl_gravity = 700
     firefly_grav_factor = 100
@@ -71,6 +72,7 @@ function level_update(dt)
     end 
 end 
 
+-- draw 
 function level_draw() 
     -- rudimentary lighting system 
     if canvas_mode then 
@@ -106,13 +108,13 @@ function level_draw()
         for _, obj in ipairs(objects) do 
             obj:draw()
         end 
+        print_wave(wave)
     end
 
     -- ui 
     ui:draw()
 end 
 
--- draw 
 function draw_back() 
     love.graphics.clear(back_color)
     love.graphics.setColor(1,1,1,1)
@@ -236,3 +238,9 @@ function shop_loc(oy)
     local y = game_h - platform.h - oy
     return x, y 
 end
+
+-- wave logic 
+function print_wave(n) 
+    local s = "WAVEx" .. n
+    properprint(s, 0, 0, 2)
+end 
