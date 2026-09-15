@@ -37,7 +37,7 @@ function level_load()
     ui = ui:new(0, 0, 3, 0)
     shop_x, shop_y = shop_loc(16)
     vending_machine = shop:new(shop_x, shop_y)
-    fireflies = vec_cat(spawn_fireflies(5, 100, 5, 5, 20), spawn_fireflies(395, 5, 5, 5, 20))
+    fireflies = vec_cat(spawn_fireflies(10, 100, 5, 5, 20), {})
     objects = vec_cat(fireflies, {vending_machine, player}) 
 
     -- rudimentary lighting system 
