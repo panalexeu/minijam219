@@ -178,7 +178,7 @@ end
 function draw_info() 
     local color_num = math.floor((wave / 10) + 1) 
     love.graphics.setColor(wave_colors[color_num])
-    local s = "wave*" .. wave .. " " .. "blind*" .. cur_blind .. " " .. "score*" .. cur_score
+    local s = "wave*" .. wave .. " " .. "blind*" .. cur_blind .. " " .. "score*" .. cur_score .. " " .. "break*" .. tostring(is_break)
     properprint(s, 0, game_h - 8, 1)
 end 
 
@@ -198,7 +198,7 @@ function level_keypressed(key)
         -- face left 
         player.dir_x = 1
     end 
-    if key == 'e' and vending_machine.is_active then 
+    if key == 'e' and vending_machine.is_active and is_break then 
         menu.is_active = not menu.is_active
     end 
 
