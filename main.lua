@@ -166,15 +166,15 @@ end
 function load_items() 
     items = {
         item:new('heart', 'just an additional heart', 1000, 'icons_heart'), 
+        item:new('mult', 'multiply the amount of fireflies by 2!', 5000, 'icons_mult'), 
+        item:new('jump', 'increase frogo jump speed!', 5000, 'icons_jump'),
+        item:new('gravity', 'decrease gravity!', 5000, 'icons_gravity'), 
+        item:new('platform_l', 'build a platform on left!', 50000, 'icons_platform_l'), 
+        item:new('platform_r', 'build a platform on right!', 50000, 'icons_platform_r'), 
         -- item:new('eye', 'reveal next wave direction!', 2000, 'icons_eye'), 
-        item:new('mult', 'multiply the amount of fireflies by 2!', 4000, 'icons_mult'), 
-        item:new('jump', 'increase frogo jump speed!', 1000, 'icons_jump'),
-        item:new('gravity', 'decrease gravity!', 1000, 'icons_gravity'), 
-        item:new('magnetic', 'magnet fireflies!', 1000, 'icons_magnetic'), 
-        item:new('platform_l', 'build a platform on left!', 4000, 'icons_platform_l'), 
-        item:new('platform_r', 'build a platform on right!', 4000, 'icons_platform_r'), 
-        item:new('icons_equal', 'fireflies share the same gravity!', 1000, 'icons_equal'), 
-        item:new('icons_tongue', 'catch fireflies with a tongue!', 4000, 'icons_tongue')
+        -- item:new('magnetic', 'magnet fireflies!', 1000, 'icons_magnetic'), 
+        -- item:new('icons_equal', 'fireflies share the same gravity!', 1000, 'icons_equal'), 
+        --item:new('icons_tongue', 'catch fireflies with a tongue!', 4000, 'icons_tongue')
     }
     return items 
 end 

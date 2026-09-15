@@ -1,7 +1,7 @@
 function level_load()
     game_state = 'level'   
     lvl = 1
-    cur_score = 10000
+    cur_score = 100000
     small_blind = 1000 
     big_blind = small_blind * 2
     cur_blind = 0
@@ -44,7 +44,8 @@ function level_load()
     active_items = {}
     menu = menu:new(0, 0, game_w, game_h, items)
     ui = ui:new(0, 0, 3, 0)
-    center_platform = platform:new(game_w / 2, game_h - 48 / 2)
+    platform_x, platform_y = game_w / 2, game_h - 48 / 2
+    center_platform = platform:new(platform_x, platform_y)
     shop_x, shop_y = shop_loc(16)
     vending_machine = shop:new(shop_x, shop_y)
     other_objects = {center_platform, vending_machine, player, ui, menu} 
@@ -335,11 +336,11 @@ end
 function notify_items()
     for i,item in ipairs(active_items) do 
         if item.name == 'heart' then handle_heart() end 
-        if item.name == 'eye' then handle_eye() end 
         if item.name == 'mult' then handle_mult() end 
         if item.name == 'jump' then handle_jump() end 
         if item.name == 'gravity' then handle_gravity() end 
-        if item.name == 'equal' then handle_equal() end 
+        if item.name == 'platform_l' then print(#objects) handle_platform_l() print(#objects) end 
+        if item.name == 'platform_r' then handle_platform_r() end 
     end 
 end
 
@@ -368,8 +369,22 @@ function handle_gravity()
     player.gravity = lvl_gravity * 0.5
 end 
 
-function handle_equal() 
+-- NOTE: if you decide to make platforms temporary just insert them in objects array 
+-- in wave_start objects anyways get overriden by concat of fireflies + other_objects
+-- to keep constant like here we store platforms in other_objects array and objects array 
+function handle_platform_l()
+    local offset = 48
+    local p = platform:new(platform_x - offset * 2, platform_y)
+    table.insert(objects, #objects, p)
+    table.insert(other_objects, #other_objects, p)
 end 
+
+function handle_platform_r()
+    local offset = 48
+    local p = platform:new(platform_x + offset * 2, platform_y)
+    table.insert(objects, #objects, p)
+    table.insert(other_objects, #other_objects, p)
+end
 
 function items_effects_cleanup()
     -- jump effect 
