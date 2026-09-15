@@ -21,3 +21,19 @@ function vec_cat(vec1, vec2)
   for i=1,#vec2 do out[#out+1] = vec2[i] end  
   return out 
 end  
+
+function vec_arrange(l, r)
+  if l > r then 
+    return nil
+  end 
+  
+  local out = {}
+  for i=l,r do out[i-l+1] = i end
+  return out
+end
+
+function str_vec(vec)
+  io.write('vec size ('.. #vec .. '): ')
+  for i=1,#vec do io.write(vec[i], ' ') end
+  print('')
+end 

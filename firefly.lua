@@ -10,7 +10,7 @@ function firefly:init(x, y, size, gravity, lifezone)
     self.dirs = {-1, 1}
     self.dir_x = self.dirs[love.math.random(#self.dirs)]    
     self.dir_y = math.sin(self.x)
-    self.velocities = {10, 15, 20, 25, 30}
+    self.velocities = vec_arrange(10, 30)
     self.vx = self.velocities[love.math.random(#self.velocities)]
     self.vy = self.vx 
     self.t = self.vx -- inner clock that starts from random velocity 
