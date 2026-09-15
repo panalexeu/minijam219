@@ -5,6 +5,7 @@ function level_load()
     small_blind = 1000 
     big_blind = small_blind * 2
     cur_blind = 0
+    blind_counter = 0 
     flies_counter = 0 
     -- physics 
     jump_vx, jump_vy = 100, 250
@@ -73,6 +74,7 @@ function level_update(dt)
     if t_wave >= wave_dur then 
         t_wave = 0
         is_break = true
+        sounds['start']:play()
         items_effects_cleanup()
         clear_items()
         clear_fireflies()
@@ -83,6 +85,7 @@ function level_update(dt)
         t_break = 0 
         is_break = false 
         menu.is_active = false
+        sounds['start']:play()
         wave_start()
         cur_blind = get_blind()
         -- note: items are notified after batch of fireflies is created
@@ -309,7 +312,6 @@ end
 function wave_start()
     wave = wave + 1
     local count = firefly_count * wave
-    sounds['start']:play()
     fireflies = spawn_fireflies(lz_spawn[wave_dir].x, lz_spawn[wave_dir].y, 5, 5, count, lifezones[wave_dir])
     objects = vec_cat(fireflies, other_objects)
 end 
@@ -325,7 +327,8 @@ function get_blind()
     else 
         temp = big_blind
     end
-    return temp * wave
+    blind_counter = blind_counter + wave
+    return temp * blind_counter
 end 
 
 function update_score()

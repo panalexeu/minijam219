@@ -24,6 +24,7 @@ function love.load()
     screen_offset_x = math.floor((window_w - game_w * screen_scale) / 2)
     screen_offset_y = math.floor((window_h - game_h * screen_scale) / 2)
     love.graphics.setDefaultFilter('nearest', 'nearest')
+    love.window.setTitle('frogo')
 
     -- music 
     notes = {}
