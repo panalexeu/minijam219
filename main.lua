@@ -9,6 +9,7 @@ function love.load()
     require "score"
     require "shop"
     require "coin"
+    require "menu"
 
     game_state = "load"
     frames = 60

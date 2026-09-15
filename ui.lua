@@ -21,3 +21,7 @@ end
 function ui:next_score() 
     self.score = self.score + 1
 end
+
+function ui:update(dt)
+    --placeholder 
+end 

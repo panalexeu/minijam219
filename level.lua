@@ -42,11 +42,12 @@ function level_load()
     -- objects 
     spawn_x, spawn_y = game_w / 2, 0
     player = frogo:new(spawn_x, spawn_y, 21, 16, 100, 250, lvl_gravity)
-    coin = coin:new(game_w / 2, game_h / 2)  
+    coin = coin:new(game_w / 2, game_h / 2) 
+    menu = menu:new(game_w / 2, game_h / 2, 200, 100, {})
     ui = ui:new(0, 0, 3, 0)
     shop_x, shop_y = shop_loc(16)
     vending_machine = shop:new(shop_x, shop_y)
-    other_objects = {vending_machine, player} 
+    other_objects = {vending_machine, player, ui, menu} 
     objects = other_objects
 
     -- rudimentary lighting system 
@@ -132,9 +133,6 @@ function level_draw()
         end 
         print_wave(wave)
     end
-
-    -- ui 
-    ui:draw()
 end 
 
 function draw_back() 
@@ -167,8 +165,7 @@ function level_keypressed(key)
         player.dir_x = 1
     end 
     if key == 'e' and vending_machine.is_active then 
-        -- TODO continue from here tomorrow 
-        print('player opened shop')
+        menu.is_active = not menu.is_active
     end 
 end 
 
