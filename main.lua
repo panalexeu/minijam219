@@ -93,6 +93,8 @@ function love.draw()
 
     if game_state == 'level' then 
         level_draw()
+    elseif game_state == 'gameover' then 
+        gameover()
     end 
 
     love.graphics.setCanvas()
@@ -176,4 +178,12 @@ function load_items()
         item:new('icons_tongue', 'catch fireflies with a tongue!', 4000, 'icons_tongue')
     }
     return items 
+end 
+
+function gameover() 
+    love.graphics.clear(0,0,0,1)
+    love.graphics.setColor(0.85, 0.15, 0.2, 1)
+    local s = 'YOU DIED'
+    local offset = 16
+    properprint('YOU DIED', game_w / 2 - (#s * offset) / 2, (game_h / 2) - offset, 2)
 end 

@@ -103,6 +103,8 @@ function level_update(dt)
             shop_player_col(obj, player)
         end 
     end 
+
+    check_gameover()
 end 
 
 -- draw 
@@ -304,4 +306,8 @@ end
 
 function update_score()
     cur_score = cur_score - cur_blind
+end 
+
+function check_gameover() 
+    if ui.hearts == 0 or cur_score < 0 then game_state = 'gameover' end 
 end 
