@@ -9,7 +9,6 @@ function menu:init(x, y, w, h, items)
     self.item_scale = 2
     self.menu_color = {0.22, 0.24, 0.40, 1}
     self.idx = 1
-    self.cur_item = self.items[self.idx]
 end 
 
 function menu:update(dt)
@@ -46,4 +45,8 @@ end
 function menu:decr_idx()
     self.idx = self.idx - 1
     if self.idx < 1 then self.idx = #items end 
+end 
+
+function menu:get_cur_item()
+    return self.items[self.idx]
 end 

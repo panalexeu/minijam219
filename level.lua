@@ -6,7 +6,7 @@ function level_load()
     big_blind = small_blind * 2
     cur_blind = 0
     -- physics 
-    lvl_gravity = 700
+    lvl_gravity = 750
     firefly_grav_factor = 100
     firefly_gravity = lvl_gravity / firefly_grav_factor
     score_grav_factor = 100
@@ -30,7 +30,7 @@ function level_load()
     t_wave = 0 
     t_break = 0 
     firefly_count = 10
-    wave_dur = 15 -- secs 
+    wave_dur = 25 -- secs 
     wave_break = 5 -- secs
     is_break = true
     wave_dirs = {'left', 'right'}
@@ -143,7 +143,8 @@ function level_draw()
         for _, obj in ipairs(objects) do 
             obj:draw()
         end 
-        print_info()
+        draw_active_items()
+        draw_info()
     end
 end 
 
@@ -158,6 +159,22 @@ function draw_light(w)
     local ox = w / 2 
     local x = (game_w / 2) - ox
     love.graphics.rectangle('fill', x, 0, w, game_h, 0, 0)
+end 
+
+function draw_active_items()
+    love.graphics.setColor(1,1,1,1)
+    local y = game_h - 16
+    local offset = 8
+    for i,item in ipairs(active_items) do 
+        love.graphics.draw(item.img, item.quad, (i-1) * offset, y, 0, 1, 1)
+    end 
+end 
+
+function draw_info() 
+    local color_num = math.floor((wave / 10) + 1) 
+    love.graphics.setColor(wave_colors[color_num])
+    local s = "wave*" .. wave .. " " .. "blind*" .. cur_blind .. " " .. "score*" .. cur_score
+    properprint(s, 0, game_h - 8, 1)
 end 
 
 -- controls 
@@ -183,7 +200,7 @@ function level_keypressed(key)
     -- menu controls 
     if key == 'up' and vending_machine.is_active then menu:decr_idx() end
     if key == 'down' and vending_machine.is_active then menu:incr_idx() end
-    if key == 'return' and vending_machine.is_active then buy_item(menu.cur_item) end 
+    if key == 'return' and vending_machine.is_active then buy_item(menu:get_cur_item()) end 
 end 
 
 -- collisions 
@@ -244,13 +261,6 @@ function get_ticks()
 end 
 
 -- wave logic and stuff
-function print_info() 
-    local color_num = math.floor((wave / 10) + 1) 
-    love.graphics.setColor(wave_colors[color_num])
-    local s = "wave*" .. wave .. " " .. "blind*" .. cur_blind .. " " .. "score*" .. cur_score
-    properprint(s, 0, game_h - 8, 1)
-end 
-
 function clear_fireflies()
     for i, obj in ipairs(objects) do
         if obj.__baseclass == firefly then  
