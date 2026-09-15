@@ -182,7 +182,8 @@ end
 function firefly_player_col(i, obj, player) 
     if obj_overlap(obj, player) then
         -- catch firefly 
-        sounds['catch']:play()
+        -- :clone so plays multiple times every time catch happened 
+        sounds['catch']:clone():play()  
         table.remove(objects, i)
         -- update score
         local n = 1000
