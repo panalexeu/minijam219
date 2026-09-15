@@ -11,6 +11,7 @@ function love.load()
     require "coin"
     require "menu"
     require "item"
+    require "platform"
 
     game_state = "load"
     frames = 60
@@ -43,9 +44,7 @@ function love.load()
     }
     load_sprite('frogo', 'frogo.png')
     load_sprite('ui', 'ui.png')
-    load_sprite('platform1', 'platform1.png') 
-    load_sprite('platform2', 'platform2.png') 
-    load_sprite('platform3', 'platform3.png') 
+    load_sprite('platform', 'platform.png') 
     load_sprite('font', 'font.png')
     load_sprite('shop', 'shop.png')
     load_sprite('hotkeys', 'hotkeys.png')

@@ -36,16 +36,6 @@ function level_load()
     is_break = true
     wave_dirs = {'left', 'right'}
     wave_dir = next_wave_dir()
-    platforms = {
-        {
-            sprite = sprites['platform1'], 
-            -- platform colision offsets
-            x = 176,
-            w = 48,
-            h = 48,
-        }
-    } 
-    -- items params 
 
     -- objects 
     spawn_x, spawn_y = game_w / 2, 0
@@ -54,9 +44,10 @@ function level_load()
     active_items = {}
     menu = menu:new(0, 0, game_w, game_h, items)
     ui = ui:new(0, 0, 3, 0)
+    center_platform = platform:new(game_w / 2, game_h - 48 / 2)
     shop_x, shop_y = shop_loc(16)
     vending_machine = shop:new(shop_x, shop_y)
-    other_objects = {vending_machine, player, ui, menu} 
+    other_objects = {center_platform, vending_machine, player, ui, menu} 
     objects = other_objects
 
     -- rudimentary lighting system 
@@ -101,7 +92,6 @@ function level_update(dt)
         obj:update(dt)
         -- collisions 
         if obj.__baseclass == frogo then 
-            player_floor_col(obj)
             player_fall_col(obj)
         elseif obj.__baseclass == firefly then
             firefly_lz_col(obj)
@@ -110,6 +100,8 @@ function level_update(dt)
             score_cleanup(i, obj)
         elseif obj.__baseclass == shop then 
             shop_player_col(obj, player)
+        elseif obj.__baseclass == platform then 
+            player_platform_col(player, obj)
         end 
     end 
 
@@ -160,7 +152,6 @@ end
 function draw_back() 
     love.graphics.clear(back_color)
     love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(platforms[lvl].sprite, 0, 0, 0, 1, 1)
 end 
 
 function draw_light(w)
@@ -213,14 +204,13 @@ function level_keypressed(key)
 end 
 
 -- collisions 
-function player_floor_col(obj)
-    local platform = platforms[lvl]
-    local floor = (game_h - platform.h) - obj.oy
-    local over = obj.x + obj.ox > platform.x
-            and obj.x - obj.ox < platform.x + platform.w
+function player_platform_col(player, obj)
+    local floor = (obj.y - obj.oy) - player.oy
+    local over = player.x + player.ox > obj.x - obj.ox
+            and player.x - player.ox < obj.x + obj.ox
 
-    if over and obj.vy >= 0 and obj.prev_y <= floor and obj.y >= floor then
-        obj:floor_col(floor)
+    if over and player.vy >= 0 and player.prev_y <= floor and player.y >= floor then
+        player:floor_col(floor)
     end
 end  
 
@@ -290,9 +280,8 @@ function player_respawn()
 end 
 
 function shop_loc(oy)
-    local platform = platforms[lvl]
     local x = game_w / 2
-    local y = game_h - platform.h - oy
+    local y = game_h - center_platform.h - oy
     return x, y 
 end
 
