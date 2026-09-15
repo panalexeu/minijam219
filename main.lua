@@ -1,5 +1,6 @@
 function love.load() 
     require "class"
+    require "animatable"
     require "level"
     require "firefly"
     require "frogo"
